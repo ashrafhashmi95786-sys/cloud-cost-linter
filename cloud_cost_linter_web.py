@@ -18,6 +18,7 @@ import sys
 import os
 import io
 import json
+import re
 import urllib.parse
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from typing import Optional, Dict, Any
@@ -30,6 +31,18 @@ except ImportError:
     from .cloud_cost_linter import CloudCostLinter, InvalidBillingDataError, CloudCostLinterError
 
 MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10 MB strict limit
+
+
+def _safe_download_stem(filename: str) -> str:
+    """Return a short, header-safe filename stem derived from an untrusted upload name."""
+    if not isinstance(filename, str):
+        filename = "uploaded_billing.csv"
+    basename = os.path.basename(filename.replace("\\", "/"))
+    stem, extension = os.path.splitext(basename)
+    candidate = stem if extension.lower() == ".csv" else basename
+    candidate = re.sub(r"[^A-Za-z0-9_-]+", "_", candidate).strip("_-")
+    return (candidate[:80] or "uploaded_billing")
+
 
 INDEX_HTML = """<!DOCTYPE html>
 <html lang="en">
@@ -899,9 +912,8 @@ class CloudCostLinterHTTPHandler(BaseHTTPRequestHandler):
         self.send_header("Content-Type", content_type)
         if content_length is not None:
             self.send_header("Content-Length", str(content_length))
-        self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, HEAD")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        # The interface is served from this same local origin; do not enable
+        # cross-origin access to the local billing-analysis API.
         if extra_headers:
             for k, v in extra_headers.items():
                 self.send_header(k, v)
@@ -990,6 +1002,11 @@ class CloudCostLinterHTTPHandler(BaseHTTPRequestHandler):
             self.wfile.write(json.dumps({"error": "Invalid Content-Length header."}).encode("utf-8"))
             return
 
+        if content_length < 0:
+            self._set_headers(400, "application/json; charset=utf-8")
+            self.wfile.write(json.dumps({"error": "Invalid negative Content-Length."}).encode("utf-8"))
+            return
+
         if content_length > MAX_UPLOAD_SIZE:
             self._set_headers(413, "application/json; charset=utf-8")
             self.wfile.write(
@@ -1009,8 +1026,13 @@ class CloudCostLinterHTTPHandler(BaseHTTPRequestHandler):
         try:
             if "application/json" in content_type:
                 payload = json.loads(body_bytes.decode("utf-8"))
+                if not isinstance(payload, dict):
+                    raise ValueError("JSON request body must be an object.")
                 csv_text = payload.get("csv", "")
-                filename = payload.get("filename", filename)
+                if not isinstance(csv_text, str):
+                    raise ValueError("CSV content must be a string.")
+                supplied_filename = payload.get("filename", filename)
+                filename = supplied_filename if isinstance(supplied_filename, str) else filename
             else:
                 csv_text = body_bytes.decode("utf-8", errors="replace")
         except Exception as e:
@@ -1040,7 +1062,7 @@ class CloudCostLinterHTTPHandler(BaseHTTPRequestHandler):
 
                 self.send_response(200)
                 self.send_header("Content-Type", "text/csv; charset=utf-8")
-                self.send_header("Content-Disposition", f'attachment; filename="cloud_cost_analysis_{filename.replace(".csv", "")}.csv"')
+                self.send_header("Content-Disposition", f'attachment; filename="cloud_cost_analysis_{_safe_download_stem(filename)}.csv"')
                 self.end_headers()
                 self.wfile.write(csv_report.encode("utf-8"))
             except CloudCostLinterError as err:
@@ -1055,7 +1077,7 @@ class CloudCostLinterHTTPHandler(BaseHTTPRequestHandler):
                 results = linter.lint_content(csv_text, source_name=filename)
                 self.send_response(200)
                 self.send_header("Content-Type", "application/json; charset=utf-8")
-                self.send_header("Content-Disposition", f'attachment; filename="cloud_cost_analysis_{filename.replace(".csv", "")}.json"')
+                self.send_header("Content-Disposition", f'attachment; filename="cloud_cost_analysis_{_safe_download_stem(filename)}.json"')
                 self.end_headers()
                 self.wfile.write(json.dumps(results, indent=2).encode("utf-8"))
             except CloudCostLinterError as err:

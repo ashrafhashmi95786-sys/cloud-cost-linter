@@ -104,6 +104,11 @@ class CloudCostLinter:
                 cost = float(clean_str)
                 if is_negative:
                     cost = -cost
+                if not math.isfinite(cost):
+                    raise InvalidBillingDataError(
+                        f"Cost must be a finite number on line {line_num} "
+                        f"for resource '{cleaned.get('resource_id', 'unknown')}'."
+                    )
             except (ValueError, TypeError):
                 raise InvalidBillingDataError(
                     f"Invalid numeric cost value '{raw_cost}' on line {line_num} "
