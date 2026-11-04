@@ -204,7 +204,7 @@ class TestCloudCostLinter(unittest.TestCase):
         for value in ("nan", "NaN", "inf", "Infinity", "-inf"):
             with self.subTest(value=value):
                 csv_text = (
-                    "record_id,service,resource_id,date,cost\\n"
+                    "record_id,service,resource_id,date,cost\n"
                     f"rec_1,GCP,res_1,2026-10-01,{value}\\n"
                 )
                 with self.assertRaises(InvalidBillingDataError):
@@ -410,7 +410,7 @@ class TestCloudCostLinter(unittest.TestCase):
         """Verify invalid numeric costs return a complete JSON error response."""
         bad_csv = (
             "record_id,service,resource_id,date,cost\\n"
-            "INV001,EC2,server-001,2026-11-04,INVALID\\n"
+            "INV001,EC2,server-001,2026-11-04,INVALID\n"
         )
         payload = json.dumps({"csv": bad_csv, "filename": "invalid-test.csv"}).encode("utf-8")
         req = urllib.request.Request(
