@@ -199,6 +199,17 @@ class TestCloudCostLinter(unittest.TestCase):
             if os.path.exists(tmp_path):
                 os.remove(tmp_path)
 
+    def test_non_finite_cost_values_rejected(self):
+        """Reject NaN and infinity values so calculations cannot be poisoned."""
+        for value in ("nan", "NaN", "inf", "Infinity", "-inf"):
+            with self.subTest(value=value):
+                csv_text = (
+                    "record_id,service,resource_id,date,cost\\n"
+                    f"rec_1,GCP,res_1,2026-10-01,{value}\\n"
+                )
+                with self.assertRaises(InvalidBillingDataError):
+                    self.linter.load_csv_content(csv_text)
+
     def test_non_numeric_cost_error(self):
         """Verify InvalidBillingDataError when cost contains non-numeric strings."""
         with tempfile.NamedTemporaryFile("w+", delete=False, suffix=".csv") as tmp:
@@ -464,6 +475,43 @@ class TestCloudCostLinter(unittest.TestCase):
             parsed = json.loads(resp.read().decode("utf-8"))
             self.assertIn("summary", parsed)
             self.assertAlmostEqual(parsed["summary"]["total_spending"], 11575.75)
+
+
+    def test_export_filename_is_sanitized_and_cors_is_not_wildcard(self):
+        """Untrusted upload names must not inject response headers or paths."""
+        with open(self.sample_csv_path, "r", encoding="utf-8") as f:
+            csv_text = f.read()
+
+        payload = json.dumps({
+            "csv": csv_text,
+            "filename": "../../evil\\r\\nX-Injected: yes.csv",
+        }).encode("utf-8")
+        req = urllib.request.Request(
+            f"{self.base_url}/api/export-csv",
+            data=payload,
+            headers={"Content-Type": "application/json", "Content-Length": str(len(payload))},
+            method="POST",
+        )
+        with urllib.request.urlopen(req) as resp:
+            disposition = resp.headers.get("Content-Disposition", "")
+            self.assertIn("attachment;", disposition)
+            self.assertNotIn("\\r", disposition)
+            self.assertNotIn("\\n", disposition)
+            self.assertNotIn("X-Injected", disposition)
+            self.assertNotIn("Access-Control-Allow-Origin", resp.headers)
+
+    def test_json_payload_must_be_object_with_string_csv(self):
+        """Reject malformed JSON API shapes instead of processing arbitrary values."""
+        payload = json.dumps(["not", "an", "object"]).encode("utf-8")
+        req = urllib.request.Request(
+            f"{self.base_url}/api/analyze",
+            data=payload,
+            headers={"Content-Type": "application/json", "Content-Length": str(len(payload))},
+            method="POST",
+        )
+        with self.assertRaises(urllib.error.HTTPError) as ctx:
+            urllib.request.urlopen(req)
+        self.assertEqual(ctx.exception.code, 400)
 
 
 if __name__ == "__main__":
