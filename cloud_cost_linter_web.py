@@ -59,8 +59,8 @@ INDEX_HTML = """<!DOCTYPE html>
       --text: #f3f4f6;
       --text-muted: #9ca3af;
       --text-dim: #6b7280;
-      --primary: #6366f1;
-      --primary-hover: #4f46e5;
+      --primary: #06b6d4;
+      --primary-hover: #0891b2;
       --emerald: #10b981;
       --emerald-bg: rgba(16, 185, 129, 0.1);
       --amber: #f59e0b;
@@ -106,9 +106,9 @@ INDEX_HTML = """<!DOCTYPE html>
       gap: 0.75rem;
     }
     .brand-badge {
-      background: rgba(99, 102, 241, 0.15);
-      border: 1px solid rgba(99, 102, 241, 0.3);
-      color: #818cf8;
+      background: rgba(6, 182, 212, 0.15);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      color: #67e8f9;
       font-weight: 700;
       font-size: 0.85rem;
       padding: 0.3rem 0.6rem;
@@ -261,13 +261,13 @@ INDEX_HTML = """<!DOCTYPE html>
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      background: rgba(99, 102, 241, 0.1);
-      border: 1px solid rgba(99, 102, 241, 0.3);
+      background: rgba(6, 182, 212, 0.1);
+      border: 1px solid rgba(6, 182, 212, 0.3);
       padding: 0.35rem 0.75rem;
       border-radius: 9999px;
       font-family: var(--font-mono);
       font-size: 0.8rem;
-      color: #c7d2fe;
+      color: #a5f3fc;
       margin-top: 1rem;
     }
     .alert-error {
