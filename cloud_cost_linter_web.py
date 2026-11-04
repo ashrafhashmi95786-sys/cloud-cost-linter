@@ -741,7 +741,7 @@ INDEX_HTML = """<!DOCTYPE html>
 
       document.getElementById('kpiAnomaliesCount').textContent = data.summary.expensive_anomalies_count;
 
-      document.getElementById('kpiTotalSavings').textContent = '$' + data.summary.total_estimated_savings.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+      document.getElementById('kpiTotalSavings').textContent = '$' + (data.summary.illustrative_rightsizing_projection ?? 0).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
 
       // Service Breakdown
       const srvList = document.getElementById('serviceList');
