@@ -1,0 +1,21 @@
+record_id,service,resource_id,date,cost,region,description
+rec_1001,Compute Engine,instance-prod-api-01,2026-10-01,142.50,us-central1,n2-standard-4 production node
+rec_1002,Compute Engine,instance-prod-api-02,2026-10-01,142.50,us-central1,n2-standard-4 production node
+rec_1003,Cloud SQL,db-postgres-master,2026-10-01,210.00,us-central1,db-custom-4-16384 high availability database
+rec_1004,Cloud SQL,db-postgres-master,2026-10-01,210.00,us-central1,Potential duplicate: duplicate billing line item on same date
+rec_1005,Cloud Storage,bkt-media-assets-prod,2026-10-01,24.80,us-central1,Standard storage 1.2TB
+rec_1006,Cloud DNS,dns-zone-main-public,2026-10-01,5.00,global,Public managed DNS zone
+rec_1007,Compute Engine,instance-gpu-training-runaway,2026-10-02,4820.00,us-east4,Cost anomaly: a2-megagpu-16g instance charge (requires telemetry to evaluate utilization)
+rec_1008,Cloud NAT,nat-gateway-us-central1,2026-10-02,32.40,us-central1,NAT gateway egress processing
+rec_1009,Persistent Disk,disk-legacy-backup-volume,2026-10-02,3450.00,us-central1,Cost anomaly: 64TB extreme SSD charge (requires I/O metrics to evaluate attachment)
+rec_1010,Cloud Logging,log-storage-system,2026-10-02,18.75,global,Log ingestion 35GB
+rec_1011,Artifact Registry,repo-docker-images,2026-10-03,6.20,us-central1,Container image repository storage
+rec_1012,BigQuery,dataset-analytics-daily,2026-10-03,89.00,us-central1,Active storage and query analysis
+rec_1013,BigQuery,dataset-analytics-daily,2026-10-03,89.00,us-central1,Potential duplicate: pipeline glitch recorded duplicate query charge
+rec_1014,Compute Engine,instance-worker-batch,2026-10-03,45.20,us-central1,e2-standard-2 batch processor
+rec_1015,Cloud Load Balancing,lb-prod-https-ingress,2026-10-04,18.00,global,Global external Application Load Balancer
+rec_1016,Network Egress,egress-internet-cdn-cache,2026-10-04,12.50,global,Worldwide CDN egress transfer
+rec_1017,Compute Engine,instance-staging-env,2026-10-04,65.00,us-central1,Staging environment test VM
+rec_1018,Secret Manager,sec-applet-credentials,2026-10-05,0.60,global,Secret version access operations
+rec_1019,Cloud Monitoring,metric-timeseries-data,2026-10-05,14.30,global,Custom application metrics ingestion
+rec_1020,Network Egress,egress-unrestricted-bucket-sync,2026-10-05,2180.00,us-central1,Cost anomaly: unexpected multi-region egress transfer spike
