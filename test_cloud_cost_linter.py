@@ -499,7 +499,10 @@ class TestCloudCostLinter(unittest.TestCase):
             self.assertNotIn("\\n", disposition)
             self.assertRegex(
                 disposition,
-                r'^attachment; filename="cloud_cost_analysis_[A-Za-z0-9_-]+\\.csv"
+                r'^attachment; filename="cloud_cost_analysis_[A-Za-z0-9_-]+\\.csv"$',
+            )
+            self.assertNotIn("..", disposition)
+            self.assertNotIn("/", disposition)
             self.assertNotIn("Access-Control-Allow-Origin", resp.headers)
 
     def test_json_payload_must_be_object_with_string_csv(self):
