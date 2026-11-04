@@ -1,5 +1,7 @@
 # Cloud Cost Linter
 
+![Cloud Cost Linter — Premium Dark Tech Banner](cloud-cost-linter-banner.png)
+
 **Analyze cloud billing CSVs locally. Spot unusual spending and potential duplicate charges.**
 
 Cloud Cost Linter is a lightweight, privacy-focused Python tool for reviewing cloud billing exports. It summarizes spending, flags statistical outliers, identifies possible duplicate entries for manual review, and provides illustrative rightsizing estimates.
@@ -123,7 +125,7 @@ The included sample dataset contains 20 billing records.
 Reported sample results:
 
 | Metric | Sample result |
-| --- | ---: |
+|---|---:|
 | Total spending | $11,575.75 |
 | Potential duplicate entries | 2 |
 | Candidate duplicate charges | $299 |
@@ -138,7 +140,7 @@ These figures describe the included sample only. They are not guaranteed financi
 The input CSV must include these columns:
 
 | Column | Description | Example |
-| --- | --- | --- |
+|---|---|---|
 | `record_id` | Billing record identifier | `rec_1001` |
 | `service` | Cloud service name | `Compute Engine` |
 | `resource_id` | Resource identifier | `instance-api-01` |
