@@ -718,9 +718,18 @@ INDEX_HTML = """<!DOCTYPE html>
           body: JSON.stringify({ csv: csvText, filename: fileName })
         });
 
-        const data = await res.json();
+        const responseText = await res.text();
+        let data = null;
+        try {
+          data = responseText ? JSON.parse(responseText) : null;
+        } catch (parseError) {
+          throw new Error(`Server returned an invalid response (HTTP ${res.status}). Please restart the local server and try again.`);
+        }
+        if (!data || typeof data !== 'object') {
+          throw new Error(`Server returned an empty response (HTTP ${res.status}). Please restart the local server and try again.`);
+        }
         if (!res.ok) {
-          throw new Error(data.error || "Failed to analyze billing CSV.");
+          throw new Error(data.error || `Failed to analyze billing CSV (HTTP ${res.status}).`);
         }
 
         currentAnalysisData = data;
@@ -920,8 +929,13 @@ class CloudCostLinterHTTPHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def _set_headers(self, status: int = 200, content_type: str = "application/json"):
-        """Convenience wrapper for _send_response_headers."""
-        self._send_response_headers(status, content_type)
+        """Send a response whose body is delimited by closing the connection."""
+        self.close_connection = True
+        self._send_response_headers(
+            status,
+            content_type,
+            extra_headers={"Connection": "close"},
+        )
 
     def do_OPTIONS(self):
         self._send_response_headers(200, "text/plain", content_length=0)
