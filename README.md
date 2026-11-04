@@ -1,7 +1,5 @@
 # Cloud Cost Linter
 
-![Cloud Cost Linter — Premium Dark Tech Banner](cloud-cost-linter-banner.png)
-
 **Analyze cloud billing CSVs locally. Spot unusual spending and potential duplicate charges.**
 
 Cloud Cost Linter is a lightweight, privacy-focused Python tool for reviewing cloud billing exports. It summarizes spending, flags statistical outliers, identifies possible duplicate entries for manual review, and provides illustrative rightsizing estimates.
