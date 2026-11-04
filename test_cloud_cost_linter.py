@@ -406,6 +406,27 @@ class TestCloudCostLinter(unittest.TestCase):
             self.assertAlmostEqual(data["summary"]["illustrative_rightsizing_projection"], 3308.00)
             self.assertFalse(data["potential_savings"]["assumptions"]["is_verified_savings"])
 
+    def test_web_server_post_analyze_invalid_numeric_cost(self):
+        """Verify invalid numeric costs return a complete JSON error response."""
+        bad_csv = (
+            "record_id,service,resource_id,date,cost\\n"
+            "INV001,EC2,server-001,2026-11-04,INVALID\\n"
+        )
+        payload = json.dumps({"csv": bad_csv, "filename": "invalid-test.csv"}).encode("utf-8")
+        req = urllib.request.Request(
+            f"{self.base_url}/api/analyze",
+            data=payload,
+            headers={"Content-Type": "application/json", "Content-Length": str(len(payload))},
+            method="POST",
+        )
+        with self.assertRaises(urllib.error.HTTPError) as ctx:
+            urllib.request.urlopen(req)
+        self.assertEqual(ctx.exception.code, 400)
+        self.assertEqual(ctx.exception.headers.get("Connection"), "close")
+        err_body = ctx.exception.read().decode("utf-8")
+        parsed = json.loads(err_body)
+        self.assertIn("Invalid numeric cost value", parsed["error"])
+
     def test_web_server_post_analyze_invalid_csv(self):
         """Verify POST /api/analyze returns HTTP 400 on malformed CSV missing required headers."""
         bad_csv = "res_name,cost_usd,category\nvm-1,50.0,Compute\n"
