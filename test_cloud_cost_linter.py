@@ -519,25 +519,3 @@ class TestCloudCostLinter(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-,
-            )
-            self.assertNotIn("..", disposition)
-            self.assertNotIn("/", disposition)
-            self.assertNotIn("Access-Control-Allow-Origin", resp.headers)
-
-    def test_json_payload_must_be_object_with_string_csv(self):
-        """Reject malformed JSON API shapes instead of processing arbitrary values."""
-        payload = json.dumps(["not", "an", "object"]).encode("utf-8")
-        req = urllib.request.Request(
-            f"{self.base_url}/api/analyze",
-            data=payload,
-            headers={"Content-Type": "application/json", "Content-Length": str(len(payload))},
-            method="POST",
-        )
-        with self.assertRaises(urllib.error.HTTPError) as ctx:
-            urllib.request.urlopen(req)
-        self.assertEqual(ctx.exception.code, 400)
-
-
-if __name__ == "__main__":
-    unittest.main()
