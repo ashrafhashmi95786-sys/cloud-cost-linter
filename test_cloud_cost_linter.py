@@ -495,11 +495,11 @@ class TestCloudCostLinter(unittest.TestCase):
         with urllib.request.urlopen(req) as resp:
             disposition = resp.headers.get("Content-Disposition", "")
             self.assertIn("attachment;", disposition)
-            self.assertNotIn("\\r", disposition)
-            self.assertNotIn("\\n", disposition)
+            self.assertNotIn("\r", disposition)
+            self.assertNotIn("\n", disposition)
             self.assertRegex(
                 disposition,
-                r'^attachment; filename="cloud_cost_analysis_[A-Za-z0-9_-]+[.]csv"
+                r'^attachment; filename="cloud_cost_analysis_[A-Za-z0-9_-]+[.]csv$'
             )
             self.assertNotIn("..", disposition)
             self.assertNotIn("/", disposition)
