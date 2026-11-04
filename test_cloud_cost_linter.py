@@ -408,8 +408,8 @@ class TestCloudCostLinter(unittest.TestCase):
 
     def test_web_server_post_analyze_invalid_numeric_cost(self):
         """Verify invalid numeric costs return a complete JSON error response."""
-        bad_csv = (
-            "record_id,service,resource_id,date,cost\\n"
+            "record_id,service,resource_id,date,cost\n"
+            "INV001,EC2,server-001,2026-11-04,INVALID\n"
             "INV001,EC2,server-001,2026-11-04,INVALID\n"
         )
         payload = json.dumps({"csv": bad_csv, "filename": "invalid-test.csv"}).encode("utf-8")
