@@ -49,7 +49,16 @@ INDEX_HTML = """<!DOCTYPE html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cloud Cost Linter — Local Privacy-First Billing Analyzer</title>
+  <meta name="theme-color" content="#0b0f19">
+  <meta name="description" content="Analyze cloud billing CSVs, identify potential duplicate charges and unusual costs, and review illustrative savings recommendations with Cloud Cost Linter.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Cloud Cost Linter — Cloud Billing Audit">
+  <meta property="og:description" content="Find potential duplicate cloud charges, unusual spending, and savings opportunities from your billing CSV.">
+  <meta property="og:url" content="https://cloud-cost-linter.onrender.com/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Cloud Cost Linter — Cloud Billing Audit">
+  <meta name="twitter:description" content="Review cloud billing CSVs for potential duplicates, cost outliers, and illustrative savings opportunities.">
+  <title>Cloud Cost Linter — Cloud Billing Audit</title>
   <style>
     :root {
       --bg: #0b0f19;
