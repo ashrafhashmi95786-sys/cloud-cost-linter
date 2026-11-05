@@ -1,8 +1,8 @@
 # Cloud Cost Linter
 
-**Analyze cloud billing CSVs locally. Spot unusual spending and potential duplicate charges.**
+**Analyze cloud billing CSVs. Spot unusual spending and potential duplicate charges.**
 
-Cloud Cost Linter is a lightweight, privacy-focused Python tool for reviewing cloud billing exports. It summarizes spending, flags statistical outliers, identifies possible duplicate entries for manual review, and provides illustrative rightsizing estimates.
+Cloud Cost Linter is a lightweight Python tool for reviewing cloud billing exports. It summarizes spending, flags statistical outliers, identifies possible duplicate entries for manual review, and provides illustrative rightsizing estimates.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.7+](https://img.shields.io/badge/Python-3.7%2B-green.svg)](https://www.python.org/)
@@ -16,7 +16,7 @@ Cloud Cost Linter is a lightweight, privacy-focused Python tool for reviewing cl
 - **Cost anomaly detection:** uses statistical analysis to flag unusually high spending.
 - **Spending breakdown:** summarizes costs by cloud service.
 - **Illustrative rightsizing estimates:** provides heuristic estimates for selected high-cost entries.
-- **Local-first analysis:** processes billing CSV files on your machine.
+- **Local CLI analysis:** the command-line tool processes billing CSV files on your machine without sending them to a server.
 - **No third-party Python dependencies:** uses the Python standard library.
 
 ## Important financial disclaimer
@@ -105,16 +105,23 @@ Open the local address shown by the server. The default standalone address is:
 http://127.0.0.1:8080
 ```
 
-### Web interface capabilities
+### Hosted web demo
 
-- Upload cloud billing CSV files.
-- Load sample billing data.
-- View spending summaries.
-- Review potential duplicate charges.
-- Identify unusual spending.
-- Export analysis reports as CSV and JSON.
+Try the hosted demo: **https://cloud-cost-linter.onrender.com**
 
-The web interface is intended for local use. Do not expose it to the public internet without an independent security review.
+The hosted web app supports:
+
+- Uploading cloud billing CSV files.
+- Viewing spending summaries.
+- Reviewing potential duplicate charges and unusual spending.
+- Exporting analysis reports as CSV and JSON.
+- Starting a fresh analysis with **Analyze Another CSV**.
+
+**Hosted demo privacy:** When you use the hosted demo, the selected CSV is sent to the server for temporary in-memory processing. Do not upload confidential, sensitive, or customer-identifying billing data. The demo does not require cloud account credentials.
+
+## Local web interface
+
+You can also run the web interface on your own machine using the instructions above. The standalone local interface processes files on your machine. Do not expose a locally running server to the public internet without an independent security review.
 
 ## Sample billing analysis
 
@@ -171,7 +178,8 @@ The latest recorded local test run completed **31 tests successfully**. Run the 
 ## Privacy and security
 
 - No cloud account credentials are required for CSV analysis.
-- Billing analysis is designed to run locally.
+- The command-line tool and standalone local web interface are designed to analyze files locally.
+- The hosted demo sends the uploaded CSV to the server for temporary in-memory processing; avoid uploading confidential or sensitive billing data.
 - Review billing files before using or sharing them.
 - Never include passwords, API keys, access tokens, or private customer information in shared files or bug reports.
 - Independently review security before processing sensitive financial data or exposing the web interface to another network.
