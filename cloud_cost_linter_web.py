@@ -681,7 +681,7 @@ INDEX_HTML = """<!DOCTYPE html>
           Audited file: <span id="auditFileName" class="font-mono text-emerald"></span>
         </div>
         <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-          <button type="button" class="btn btn-secondary" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+          <button type="button" class="btn btn-secondary" id="analyzeAnotherBtn">
             Analyze Another CSV
           </button>
           <button type="button" class="btn btn-secondary" id="downloadJsonBtn">
@@ -713,6 +713,19 @@ INDEX_HTML = """<!DOCTYPE html>
     const sampleBtn = document.getElementById('sampleBtn');
     const downloadCsvBtn = document.getElementById('downloadCsvBtn');
     const downloadJsonBtn = document.getElementById('downloadJsonBtn');
+
+    // Start a fresh upload: clear the browser file selection and previous analysis.
+    document.getElementById('analyzeAnotherBtn').addEventListener('click', () => {
+      currentCsvText = null;
+      currentAnalysisData = null;
+      currentFileName = "uploaded_billing.csv";
+      fileInput.value = "";
+      fileInfo.innerHTML = "";
+      fileInfo.style.display = 'none';
+      resultsContainer.style.display = 'none';
+      hideError();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 
     // Drag and drop handlers
     ['dragenter', 'dragover'].forEach(eventName => {
