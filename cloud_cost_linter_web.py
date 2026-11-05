@@ -456,6 +456,25 @@ INDEX_HTML = """<!DOCTYPE html>
       table { min-width: 760px; }
       footer { padding: 1.1rem 1rem; }
     }
+    @media (max-width: 600px) {
+      #recommendationsList > div {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        min-width: 0;
+      }
+      #recommendationsList > div > div:first-child {
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+      #recommendationsList > div > div:last-child {
+        white-space: normal !important;
+        overflow-wrap: anywhere;
+        max-width: 100%;
+        text-align: left;
+        margin-top: 0.35rem;
+      }
+    }
+
     @media (max-width: 440px) {
       .brand-title { font-size: 1rem; }
       .status-badges { font-size: 0.68rem; }
