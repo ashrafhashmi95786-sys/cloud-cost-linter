@@ -431,6 +431,43 @@ INDEX_HTML = """<!DOCTYPE html>
       color: var(--text-dim);
       margin-top: auto;
     }
+  
+    /* Responsive layout improvements */
+    @media (max-width: 760px) {
+      header { padding: 0.85rem 1rem; }
+      .header-inner { align-items: flex-start; }
+      .status-badges { flex-wrap: wrap; }
+      main { padding: 1.25rem 1rem; }
+      .intro-card, .panel { padding: 1.1rem; }
+      .intro-grid { grid-template-columns: 1fr; gap: 1rem; }
+      .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; }
+      .kpi-card { padding: 1rem; min-width: 0; }
+      .kpi-value { font-size: 1.35rem; overflow-wrap: anywhere; }
+      .panel-header { align-items: flex-start; gap: 0.65rem; flex-wrap: wrap; }
+      .service-name { width: 125px; overflow-wrap: anywhere; }
+      .service-bar-container { margin: 0 0.6rem; }
+      .service-amount { width: auto; min-width: 92px; font-size: 0.78rem; }
+      .upload-container { padding: 1.75rem 1rem; }
+      .upload-actions { flex-direction: column; align-items: stretch; }
+      .upload-actions .btn { justify-content: center; min-height: 44px; }
+      .action-bar { align-items: stretch; flex-direction: column; }
+      .action-bar > div:last-child { display: flex; flex-direction: column; }
+      .action-bar .btn { justify-content: center; min-height: 44px; }
+      table { min-width: 760px; }
+      footer { padding: 1.1rem 1rem; }
+    }
+    @media (max-width: 440px) {
+      .brand-title { font-size: 1rem; }
+      .status-badges { font-size: 0.68rem; }
+      .kpi-grid { grid-template-columns: 1fr; }
+      .kpi-card { padding: 0.9rem 1rem; }
+      .service-row { align-items: flex-start; flex-wrap: wrap; gap: 0.35rem; }
+      .service-name { width: 100%; }
+      .service-bar-container { margin: 0; min-width: 55%; }
+      .service-amount { margin-left: auto; }
+      .disclaimer-banner { padding: 0.85rem; }
+    }
+
   </style>
 </head>
 <body>
