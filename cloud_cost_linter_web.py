@@ -297,7 +297,8 @@ INDEX_HTML = """<!DOCTYPE html>
       display: none;
     }
     .kpi-grid {
-      display: grid;      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 1rem;
       margin-bottom: 1.5rem;
     }
@@ -633,7 +634,8 @@ INDEX_HTML = """<!DOCTYPE html>
       </div>
 
       <!-- Recommendations List -->
-      <div class="panel">        <div class="panel-header">
+      <div class="panel">
+        <div class="panel-header">
           <div class="panel-title">Savings Recommendations & Heuristics</div>
           <span style="font-size: 0.75rem; color: var(--amber);">40% Illustrative Heuristic</span>
         </div>
@@ -932,7 +934,8 @@ INDEX_HTML = """<!DOCTYPE html>
     function escapeHtml(str) {
       if (!str) return '';
       return String(str)
-        .replace(/&/g, '&amp;')        .replace(/</g, '&lt;')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#039;');
