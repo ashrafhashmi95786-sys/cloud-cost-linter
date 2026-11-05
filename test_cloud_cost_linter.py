@@ -350,6 +350,10 @@ class TestCloudCostLinter(unittest.TestCase):
         with urllib.request.urlopen(req) as resp:
             self.assertEqual(resp.status, 200)
             self.assertIn("text/html", resp.headers.get("Content-Type", ""))
+            self.assertEqual(resp.headers.get("X-Content-Type-Options"), "nosniff")
+            self.assertEqual(resp.headers.get("X-Frame-Options"), "DENY")
+            self.assertEqual(resp.headers.get("Referrer-Policy"), "no-referrer")
+            self.assertIn("frame-ancestors 'none'", resp.headers.get("Content-Security-Policy", ""))
             html = resp.read().decode("utf-8")
             self.assertIn("Cloud Cost Linter", html)
             self.assertIn("100% Local · Zero Telemetry", html)

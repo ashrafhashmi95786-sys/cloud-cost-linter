@@ -921,6 +921,11 @@ class CloudCostLinterHTTPHandler(BaseHTTPRequestHandler):
         self.send_header("Content-Type", content_type)
         if content_length is not None:
             self.send_header("Content-Length", str(content_length))
+        # Defense-in-depth headers for the local interface and API.
+        self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("X-Frame-Options", "DENY")
+        self.send_header("Referrer-Policy", "no-referrer")
+        self.send_header("Content-Security-Policy", "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; base-uri 'none'; frame-ancestors 'none'")
         # The interface is served from this same local origin; do not enable
         # cross-origin access to the local billing-analysis API.
         if extra_headers:
@@ -1067,7 +1072,7 @@ class CloudCostLinterHTTPHandler(BaseHTTPRequestHandler):
                 self.wfile.write(json.dumps({"error": str(err)}).encode("utf-8"))
             except Exception as err:
                 self._set_headers(500, "application/json; charset=utf-8")
-                self.wfile.write(json.dumps({"error": f"Analysis failed: {err}"}).encode("utf-8"))
+                self.wfile.write(json.dumps({"error": "Analysis failed due to an internal server error."}).encode("utf-8"))
 
         elif path == "/api/export-csv":
             try:
@@ -1084,7 +1089,7 @@ class CloudCostLinterHTTPHandler(BaseHTTPRequestHandler):
                 self.wfile.write(json.dumps({"error": str(err)}).encode("utf-8"))
             except Exception as err:
                 self._set_headers(500, "application/json; charset=utf-8")
-                self.wfile.write(json.dumps({"error": f"Export failed: {err}"}).encode("utf-8"))
+                self.wfile.write(json.dumps({"error": "Export failed due to an internal server error."}).encode("utf-8"))
 
         elif path == "/api/export-json":
             try:
