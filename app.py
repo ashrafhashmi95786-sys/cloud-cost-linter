@@ -41,7 +41,10 @@ def add_security_headers(response):
         "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; "
         "script-src 'self' 'unsafe-inline'; base-uri 'none'; frame-ancestors 'none'"
     )
-    response.headers["Cache-Control"] = "no-store"
+    if request.path == "/social-preview.svg":
+        response.headers["Cache-Control"] = "public, max-age=86400"
+    else:
+        response.headers["Cache-Control"] = "no-store"
     return response
 
 @app.errorhandler(RequestEntityTooLarge)
@@ -52,6 +55,15 @@ def too_large(_error):
 @app.get("/index.html")
 def index():
     return Response(HOSTED_HTML, mimetype="text/html")
+
+@app.get("/social-preview.svg")
+def social_preview():
+    path = os.path.join(os.path.dirname(__file__), "social-preview.svg")
+    try:
+        with open(path, "rb") as handle:
+            return Response(handle.read(), mimetype="image/svg+xml")
+    except OSError:
+        return Response("Social preview image not found.", status=404, mimetype="text/plain")
 
 @app.get("/api/health")
 def health():
