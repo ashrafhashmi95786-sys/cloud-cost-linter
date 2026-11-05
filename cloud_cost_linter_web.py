@@ -55,9 +55,14 @@ INDEX_HTML = """<!DOCTYPE html>
   <meta property="og:title" content="Cloud Cost Linter — Cloud Billing Audit">
   <meta property="og:description" content="Find potential duplicate cloud charges, unusual spending, and savings opportunities from your billing CSV.">
   <meta property="og:url" content="https://cloud-cost-linter.onrender.com/">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:site_name" content="Cloud Cost Linter">
+  <meta property="og:image" content="https://cloud-cost-linter.onrender.com/social-preview.svg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Cloud Cost Linter — Cloud Billing Audit">
   <meta name="twitter:description" content="Review cloud billing CSVs for potential duplicates, cost outliers, and illustrative savings opportunities.">
+  <meta name="twitter:image" content="https://cloud-cost-linter.onrender.com/social-preview.svg">
   <title>Cloud Cost Linter — Cloud Billing Audit</title>
   <style>
     :root {
@@ -1020,6 +1025,21 @@ class CloudCostLinterHTTPHandler(BaseHTTPRequestHandler):
             self._send_response_headers(200, "text/html; charset=utf-8", content_length=len(body_bytes))
             if send_body:
                 self.wfile.write(body_bytes)
+            return
+
+        elif path == "/social-preview.svg":
+            svg_path = os.path.join(os.path.dirname(__file__), "social-preview.svg")
+            try:
+                with open(svg_path, "rb") as f:
+                    body_bytes = f.read()
+                self._send_response_headers(200, "image/svg+xml; charset=utf-8", content_length=len(body_bytes), extra_headers={"Cache-Control": "public, max-age=86400"})
+                if send_body:
+                    self.wfile.write(body_bytes)
+            except OSError:
+                body_bytes = b"Social preview image not found."
+                self._send_response_headers(404, "text/plain; charset=utf-8", content_length=len(body_bytes))
+                if send_body:
+                    self.wfile.write(body_bytes)
             return
 
         elif path == "/api/health":
