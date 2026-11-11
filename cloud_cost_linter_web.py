@@ -2,13 +2,15 @@
 """
 Cloud Cost Linter - Local Web Interface
 ========================================
-An offline, privacy-first local web interface for analyzing cloud billing CSVs.
+An optional local or hosted web interface for analyzing cloud billing CSVs.
 Built using Python standard library (http.server) with zero external dependencies.
 
-Privacy Guarantee:
-- 100% Local processing on 127.0.0.1.
-- No external network calls, no cloud telemetry, no analytics.
-- Zero API keys or cloud credentials requested or required.
+Privacy:
+- Local deployments process CSV content on the machine running the server.
+- Hosted deployments receive CSV content over HTTPS for in-memory analysis.
+- The application does not intentionally write uploaded CSV contents to persistent storage.
+- Hosting-provider infrastructure, temporary files, and logging policies may also affect data handling.
+- No cloud credentials are required for CSV analysis.
 
 Author: Autonomous AI Society (Developer: Kaelen Vance, Marketer: Sariha Chen)
 License: MIT
@@ -511,7 +513,7 @@ INDEX_HTML = """<!DOCTYPE html>
         <span class="brand-title">Cloud Cost Linter</span>
       </div>
       <div class="status-badges">
-        <span class="badge badge-privacy">● 100% Local · Zero Telemetry</span>
+        <span class="badge badge-privacy">● In-Memory Analysis · No Intentional CSV Persistence</span>
         <span class="badge badge-budget">Zero-Budget Open Source</span>
       </div>
     </div>
@@ -520,9 +522,9 @@ INDEX_HTML = """<!DOCTYPE html>
   <main>
     <!-- Non-technical instructions by Marketer -->
     <div class="intro-card">
-      <h2 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.25rem;">Simple & Private Cloud Billing Audit</h2>
+      <h2 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.25rem;">Simple Cloud Billing Audit</h2>
       <p style="font-size: 0.85rem; color: var(--text-muted);">
-        Analyze your monthly cloud spending CSV without sharing data or using command lines. Your files never leave your computer.
+        Local mode processes CSV content on the machine running the server. Hosted mode transmits uploaded CSV content over HTTPS for in-memory analysis. The application does not intentionally write uploaded CSV contents to persistent storage. Hosting-provider infrastructure, temporary files, and logging policies may also affect data handling. Do not upload confidential or sensitive billing data to the hosted demo.
       </p>
       <div class="intro-grid">
         <div class="step-item">
@@ -697,7 +699,7 @@ INDEX_HTML = """<!DOCTYPE html>
   </main>
 
   <footer>
-    Autonomous AI Society · Mission 002 Product Upgrade · Zero-Budget FinOps Engineering · 100% Offline & Private
+    Autonomous AI Society · Mission 002 Product Upgrade · In-Memory CSV Analysis · No Intentional CSV Persistence
   </footer>
 
   <script>
@@ -1060,7 +1062,7 @@ class CloudCostLinterHTTPHandler(BaseHTTPRequestHandler):
                 "status": "ok",
                 "application": "Cloud Cost Linter",
                 "version": "2.0.0",
-                "privacy": "100% Local-First (No external network traffic)",
+                "privacy": "Local deployments process data locally; hosted deployments receive CSV content over HTTPS for in-memory analysis. The application does not intentionally persist uploaded CSV contents.",
             }
             body_bytes = json.dumps(resp).encode("utf-8")
             self._send_response_headers(200, "application/json; charset=utf-8", content_length=len(body_bytes))
@@ -1231,7 +1233,7 @@ def run_web_server(port: int = 8080, host: str = "127.0.0.1"):
     print("           CLOUD COST LINTER — LOCAL WEB INTERFACE (MISSION 002)")
     print("=" * 74)
     print(f" Status:       Running locally at http://{host}:{port}/")
-    print(" Privacy:      100% Local-First. Zero telemetry, zero external APIs.")
+    print(" Privacy:      Local mode processes on this machine; hosted mode receives CSVs over HTTPS for in-memory analysis.")
     print(" Security:     Strict CSV validation · No execution of uploaded files.")
     print(" Dependencies: Python Standard Library Only (₹0 Development Budget)")
     print("-" * 74)
