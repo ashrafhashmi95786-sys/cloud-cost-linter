@@ -121,7 +121,7 @@ The hosted web app supports:
 - Exporting analysis reports as CSV and JSON.
 - Starting a fresh analysis with **Analyze Another CSV**.
 
-**Hosted demo privacy:** When you use the hosted demo, the selected CSV is sent to the server for temporary in-memory processing. Do not upload confidential, sensitive, or customer-identifying billing data. The demo does not require cloud account credentials.
+**Hosted demo privacy:** When you use the hosted demo, uploaded CSV content is transmitted to the server over HTTPS for in-memory analysis. The application does not intentionally write uploaded CSV contents to persistent storage. Hosting-provider infrastructure, temporary files, and server-side logging policies may also affect data handling. Do not upload confidential, sensitive, or customer-identifying billing data. The demo does not require cloud account credentials.
 
 ## Local web interface
 
@@ -182,8 +182,11 @@ The latest recorded local test run completed **31 tests successfully**. Run the 
 ## Privacy and security
 
 - No cloud account credentials are required for CSV analysis.
-- The command-line tool and standalone local web interface are designed to analyze files locally.
-- The hosted demo sends the uploaded CSV to the server for temporary in-memory processing; avoid uploading confidential or sensitive billing data.
+- The command-line tool processes billing files locally on your machine.
+- The standalone local web interface processes CSV content on the machine running the local server.
+- The hosted demo transmits uploaded CSV content over HTTPS to the server for in-memory analysis.
+- The application does not intentionally write uploaded CSV contents to persistent storage; hosting-provider infrastructure, temporary files, and logging policies may also affect data handling.
+- Do not upload confidential or sensitive billing data to the hosted demo.
 - Review billing files before using or sharing them.
 - Never include passwords, API keys, access tokens, or private customer information in shared files or bug reports.
 - Independently review security before processing sensitive financial data or exposing the web interface to another network.

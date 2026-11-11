@@ -22,7 +22,7 @@ import threading
 import urllib.request
 import urllib.error
 from http.server import HTTPServer
-from cloud_cost_linter import CloudCostLinter, InvalidBillingDataError, CloudCostLinterError
+from cloud_cost_linter import CloudCostLinter, InvalidBillingDataError, CloudCostLinterError, _safe_csv_cell
 from cloud_cost_linter_web import CloudCostLinterHTTPHandler, MAX_UPLOAD_SIZE
 
 
@@ -284,6 +284,57 @@ class TestCloudCostLinter(unittest.TestCase):
     # MISSION 002 PRODUCT UPGRADE & LOCAL WEB INTERFACE TESTS
     # -------------------------------------------------------------
 
+    def test_load_csv_content_with_utf8_bom(self):
+        """Verify in-memory CSV parsing strips a UTF-8 BOM before header validation."""
+        content = (
+            "\ufeffrecord_id,service,resource_id,date,cost\n"
+            "rec_bom,GCP,vm-bom,2026-11-11,10.00"
+        )
+        records = self.linter.load_csv_content(content, source_name="bom_memory_test.csv")
+        self.assertEqual(len(records), 1)
+        self.assertEqual(records[0]["record_id"], "rec_bom")
+        self.assertAlmostEqual(records[0]["cost"], 10.00)
+
+    def test_load_csv_file_with_utf8_bom(self):
+        """Verify file-based CSV parsing strips a UTF-8 BOM."""
+        content = (
+            "\ufeffrecord_id,service,resource_id,date,cost\n"
+            "rec_bom,GCP,vm-bom,2026-11-11,10.00"
+        )
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", delete=False, suffix=".csv") as tmp:
+            tmp.write(content)
+            tmp_path = tmp.name
+
+        try:
+            records = self.linter.load_csv(tmp_path)
+            self.assertEqual(len(records), 1)
+            self.assertEqual(records[0]["record_id"], "rec_bom")
+            self.assertAlmostEqual(records[0]["cost"], 10.00)
+        finally:
+            if os.path.exists(tmp_path):
+                os.remove(tmp_path)
+
+    def test_safe_csv_cell_formula_prefixes_and_whitespace(self):
+        """Verify formula-like prefixes are neutralized without altering ordinary text."""
+        dangerous_values = [
+            "=SUM(A1)",
+            "+100",
+            "-100",
+            "@IMPORT",
+            "  =SUM(A1)",
+            "\t50",
+            "\r\n10",
+            "\n=SUM(A1)",
+        ]
+        for value in dangerous_values:
+            with self.subTest(value=value):
+                self.assertEqual(_safe_csv_cell(value), "'" + value)
+
+        self.assertEqual(_safe_csv_cell("  100"), "  100")
+        self.assertEqual(_safe_csv_cell("10.50"), "10.50")
+        self.assertEqual(_safe_csv_cell("ec2-instance"), "ec2-instance")
+        self.assertEqual(_safe_csv_cell(10.50), 10.50)
+
     def test_load_csv_content_memory(self):
         """Verify in-memory string CSV parsing without requiring disk files."""
         with open(self.sample_csv_path, "r", encoding="utf-8") as f:
@@ -356,7 +407,10 @@ class TestCloudCostLinter(unittest.TestCase):
             self.assertIn("frame-ancestors 'none'", resp.headers.get("Content-Security-Policy", ""))
             html = resp.read().decode("utf-8")
             self.assertIn("Cloud Cost Linter", html)
-            self.assertIn("100% Local · Zero Telemetry", html)
+            self.assertIn("In-Memory Analysis · No Intentional CSV Persistence", html)
+            self.assertIn("Hosted mode transmits uploaded CSV content over HTTPS", html)
+            self.assertNotIn("Your files never leave your computer", html)
+            self.assertNotIn("100% Offline & Private", html)
             self.assertIn("Select or Drop Your Cloud Billing CSV", html)
 
     def test_web_server_head_request(self):
@@ -387,7 +441,8 @@ class TestCloudCostLinter(unittest.TestCase):
             self.assertEqual(resp.status, 200)
             data = json.loads(resp.read().decode("utf-8"))
             self.assertEqual(data["status"], "ok")
-            self.assertIn("100% Local-First", data["privacy"])
+            self.assertIn("hosted deployments receive CSV content over HTTPS", data["privacy"])
+            self.assertIn("does not intentionally persist", data["privacy"])
 
     def test_web_server_post_analyze_valid(self):
         """Verify POST /api/analyze processes valid CSV and returns analysis JSON."""

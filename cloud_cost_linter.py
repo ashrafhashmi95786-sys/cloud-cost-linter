@@ -159,7 +159,7 @@ class CloudCostLinter:
         self.validate_file_path(file_path)
 
         try:
-            with open(file_path, mode="r", encoding="utf-8") as f:
+            with open(file_path, mode="r", encoding="utf-8-sig") as f:
                 reader = csv.DictReader(f)
                 return self._parse_csv_stream(reader, file_path)
         except (UnicodeDecodeError, csv.Error) as err:
@@ -179,6 +179,9 @@ class CloudCostLinter:
 
         if not content_str or not content_str.strip():
             raise InvalidBillingDataError(f"Billing data '{source_name}' is empty.")
+
+        if content_str.startswith("\ufeff"):
+            content_str = content_str[1:]
 
         try:
             stream = io.StringIO(content_str)
