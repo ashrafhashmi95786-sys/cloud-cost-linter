@@ -287,7 +287,7 @@ class TestCloudCostLinter(unittest.TestCase):
     def test_load_csv_content_with_utf8_bom(self):
         """Verify in-memory CSV parsing strips a UTF-8 BOM before header validation."""
         content = (
-            "\\ufeffrecord_id,service,resource_id,date,cost\\n"
+            "\ufeffrecord_id,service,resource_id,date,cost\n"
             "rec_bom,GCP,vm-bom,2026-11-11,10.00"
         )
         records = self.linter.load_csv_content(content, source_name="bom_memory_test.csv")
@@ -298,7 +298,7 @@ class TestCloudCostLinter(unittest.TestCase):
     def test_load_csv_file_with_utf8_bom(self):
         """Verify file-based CSV parsing strips a UTF-8 BOM."""
         content = (
-            "\\ufeffrecord_id,service,resource_id,date,cost\\n"
+            "\ufeffrecord_id,service,resource_id,date,cost\n"
             "rec_bom,GCP,vm-bom,2026-11-11,10.00"
         )
         with tempfile.NamedTemporaryFile("w", encoding="utf-8", delete=False, suffix=".csv") as tmp:
@@ -322,9 +322,9 @@ class TestCloudCostLinter(unittest.TestCase):
             "-100",
             "@IMPORT",
             "  =SUM(A1)",
-            "\\t50",
-            "\\r\\n10",
-            "\\n=SUM(A1)",
+            "\t50",
+            "\r\n10",
+            "\n=SUM(A1)",
         ]
         for value in dangerous_values:
             with self.subTest(value=value):
