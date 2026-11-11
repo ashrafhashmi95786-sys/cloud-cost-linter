@@ -31,6 +31,26 @@ class InvalidBillingDataError(CloudCostLinterError):
     pass
 
 
+def _safe_csv_cell(value: Any) -> Any:
+    """Neutralize spreadsheet formula prefixes in untrusted text cells."""
+    if not isinstance(value, str):
+        return value
+    stripped = value.lstrip(" \t\r\n")
+    if value.startswith(("\t", "\r", "\n")) or stripped.startswith(("=", "+", "-", "@")):
+        return "'" + value
+    return value
+
+
+class _FormulaSafeCSVWriter:
+    """CSV writer adapter that sanitizes text cells before serialization."""
+
+    def __init__(self, output: Any):
+        self._writer = csv.writer(output)
+
+    def writerow(self, row: List[Any]) -> None:
+        self._writer.writerow([_safe_csv_cell(value) for value in row])
+
+
 class CloudCostLinter:
     """Core analysis engine for cloud billing logs."""
 
@@ -401,7 +421,7 @@ class CloudCostLinter:
     def generate_csv_report(self, results: Dict[str, Any]) -> str:
         """Generates a downloadable, audit-ready structured CSV analysis report."""
         output = io.StringIO()
-        writer = csv.writer(output)
+        writer = _FormulaSafeCSVWriter(output)
 
         # 1. Header & Executive Summary
         writer.writerow(["=== CLOUD COST LINTER AUDIT REPORT ==="])
