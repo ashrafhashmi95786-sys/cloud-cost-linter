@@ -499,6 +499,38 @@ class TestCloudCostLinter(unittest.TestCase):
             self.assertAlmostEqual(parsed["summary"]["total_spending"], 11575.75)
 
 
+    def test_csv_report_neutralizes_spreadsheet_formula_cells(self):
+        """Untrusted text fields must not be interpreted as spreadsheet formulas."""
+        results = self.linter.lint_content(
+            open(self.sample_csv_path, "r", encoding="utf-8").read(),
+            source_name="=HYPERLINK('https://example.invalid','open')",
+        )
+        results["spending_breakdown"]["spending_by_service"] = {
+            "@SUM(1,1)": 1.0,
+            "Normal Service": 2.0,
+        }
+        results["duplicates"] = [{
+            "duplicate_record_id": "+CMD|' /C calc'!A0",
+            "original_record_id": "-1+1",
+            "service": "=2+2",
+            "resource_id": "\t=HYPERLINK('https://example.invalid')",
+            "date": "2026-11-11",
+            "cost": 1.0,
+            "explanation": "@SUM(1,1)",
+        }]
+        results["expensive_services"] = []
+        results["potential_savings"]["recommendations"] = []
+
+        report = self.linter.generate_csv_report(results)
+
+        self.assertIn("'=HYPERLINK", report)
+        self.assertIn("'@SUM(1,1)", report)
+        self.assertIn("'+CMD", report)
+        self.assertIn("'-1+1", report)
+        self.assertIn("'=2+2", report)
+        self.assertIn("'\t=HYPERLINK", report)
+        self.assertIn("Normal Service", report)
+
     def test_export_filename_is_sanitized_and_cors_is_not_wildcard(self):
         """Untrusted upload names must not inject response headers or paths."""
         with open(self.sample_csv_path, "r", encoding="utf-8") as f:
