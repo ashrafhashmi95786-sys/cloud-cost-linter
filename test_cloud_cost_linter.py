@@ -503,7 +503,7 @@ class TestCloudCostLinter(unittest.TestCase):
         """Untrusted text fields must not be interpreted as spreadsheet formulas."""
         results = self.linter.lint_content(
             open(self.sample_csv_path, "r", encoding="utf-8").read(),
-            filename="=HYPERLINK('https://example.invalid','open')",
+            source_name="=HYPERLINK('https://example.invalid','open')",
         )
         results["spending_breakdown"]["spending_by_service"] = {
             "@SUM(1,1)": 1.0,
