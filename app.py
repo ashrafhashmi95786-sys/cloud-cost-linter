@@ -20,7 +20,7 @@ HOSTED_HTML = (
     INDEX_HTML
     .replace("<title>Cloud Cost Linter — Local Privacy-First Billing Analyzer</title>",
              "<title>Cloud Cost Linter — Cloud Billing Analyzer</title>")
-    .replace("● 100% Local · Zero Telemetry", "● Hosted Demo · No Analytics")
+    .replace("● 100% Local · Zero Telemetry", "● Free Online Tool · In-Memory Processing")
     .replace("Analyze your monthly cloud spending CSV without sharing data or using command lines. Your files never leave your computer.",
              "Analyze a cloud billing CSV in your browser. For this hosted demo, the CSV is sent to the server for temporary in-memory processing; do not upload confidential or sensitive billing data.")
     .replace("Strict local parsing · Max 10MB", "Server-side processing · Max 10MB")
