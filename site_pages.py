@@ -89,64 +89,173 @@ PAGES = {
 
 GUIDES = {
     "cloud-billing-csv-guide": {
-        "title": "How to Read a Cloud Billing CSV",
-        "description": "Understand the key columns in a cloud billing CSV and prepare a file for cost analysis.",
+        "title": "How to Read a Cloud Billing CSV: A Practical Guide",
+        "description": "A practical guide to cloud billing CSV columns, export checks, cost normalization, and safe analysis.",
         "heading": "How to Read a Cloud Billing CSV",
         "body": """
-<p>A cloud billing CSV is a record of charges reported by a cloud provider for a billing period. It is useful for cost review, but it is not a complete picture of how resources were used.</p>
-<h2>Start with the important fields</h2>
-<ul><li><strong>Record ID:</strong> a unique identifier for a billing line, when the provider supplies one.</li><li><strong>Service:</strong> the product or service associated with the charge.</li><li><strong>Resource ID:</strong> the resource identifier, if available.</li><li><strong>Date:</strong> the usage or billing date represented by the row.</li><li><strong>Cost:</strong> the amount charged, interpreted with the currency and billing context.</li></ul>
-<h2>Check the export before analysis</h2>
-<p>Confirm the billing period, currency, timezone, tax treatment, credits, discounts, and whether amounts are amortized or billed on demand. Different providers and export settings use different schemas, so map columns carefully instead of assuming that two exports are directly comparable.</p>
-<h2>What a CSV cannot tell you</h2>
-<p>A charge does not establish whether a resource was idle, underused, or correctly configured. Pair billing records with utilization metrics and resource inventory before recommending a change.</p>
-<h2>Use Cloud Cost Linter</h2>
-<p>Cloud Cost Linter expects record_id, service, resource_id, date, and cost columns. Try the <a href="/">hosted CSV analyzer</a> with a synthetic or non-sensitive example. Do not upload confidential billing exports to the public demo.</p>
+<p>A cloud billing CSV turns provider charges into rows that can be filtered, grouped, compared, and investigated. It is a useful starting point for FinOps work, but it is not a complete record of resource health or business value. A careful review begins by understanding what each row represents and which billing rules produced it.</p>
+<h2>1. Understand the common billing fields</h2>
+<p>Provider exports differ, but many contain equivalents of the following fields:</p>
+<table><thead><tr><th>Field</th><th>What it usually means</th><th>What to verify</th></tr></thead><tbody>
+<tr><td>Record or line-item ID</td><td>Identifier for an individual billing row</td><td>Whether it is stable and unique in this export</td></tr>
+<tr><td>Service or product</td><td>Cloud service associated with the charge</td><td>Provider naming and product-family grouping</td></tr>
+<tr><td>Resource ID</td><td>Resource associated with usage, when supplied</td><td>Whether IDs are missing, renamed, or scoped to a region</td></tr>
+<tr><td>Usage or billing date</td><td>Date or interval represented by the charge</td><td>Timezone, interval boundaries, and billing-period coverage</td></tr>
+<tr><td>Cost or amount</td><td>Charge, credit, or adjustment amount</td><td>Currency, sign, tax treatment, and pricing basis</td></tr>
+</tbody></table>
+<p>Other useful dimensions may include account, project, subscription, region, availability zone, SKU, usage type, quantity, unit, pricing model, tags, and invoice ID. Keep these dimensions when possible: removing them too early can make later investigation difficult.</p>
+<h2>2. Check the export before comparing costs</h2>
+<p>Before analyzing a file, confirm that it covers the intended billing period and that all expected accounts and services are included. Check whether the export is final or still subject to adjustment. Some providers revise usage, apply credits later, or publish delayed line items.</p>
+<ul>
+<li><strong>Currency:</strong> do not add amounts in different currencies without a documented conversion method and date.</li>
+<li><strong>Taxes and credits:</strong> identify whether totals include tax, discounts, refunds, promotional credits, or support charges.</li>
+<li><strong>Commitments:</strong> understand how reservations, savings plans, committed-use discounts, and amortized costs are represented.</li>
+<li><strong>Granularity:</strong> hourly, daily, and monthly exports are not directly interchangeable.</li>
+<li><strong>Completeness:</strong> compare export totals with the provider invoice or billing console.</li>
+</ul>
+<h2>3. Normalize carefully</h2>
+<p>For a useful comparison, group rows using consistent dimensions such as service, resource, region, and time period. Avoid treating two rows as equivalent merely because their amounts match. A charge may be split across usage types, or several legitimate rows may refer to one resource.</p>
+<p>For example, imagine a report contains three storage-related rows for the same resource on one day: storage capacity, request operations, and data retrieval. Those rows may all be valid components of the service. A useful analysis preserves the usage type and unit rather than collapsing everything into one apparent duplicate.</p>
+<h2>4. A simple review workflow</h2>
+<ol>
+<li>Save an unchanged copy of the original export in an approved, access-controlled location.</li>
+<li>Record the export date, billing period, currency, provider, and account scope.</li>
+<li>Validate required columns and check for blank identifiers, invalid dates, and non-numeric amounts.</li>
+<li>Reconcile the total with the provider's billing console or invoice.</li>
+<li>Group spending by service, account, project, region, and resource where those dimensions exist.</li>
+<li>Investigate large changes using deployment history, usage metrics, and pricing details.</li>
+<li>Document findings, assumptions, owners, and follow-up actions.</li>
+</ol>
+<h2>5. Prepare a file for Cloud Cost Linter</h2>
+<p>Cloud Cost Linter's current CSV interface expects these exact column names: <code>record_id</code>, <code>service</code>, <code>resource_id</code>, <code>date</code>, and <code>cost</code>. Map provider-specific column names to this schema in a working copy. Keep the original export unchanged so that you can trace every transformation.</p>
+<p>Use a synthetic or non-sensitive sample when trying the <a href="/">Cloud Cost Linter hosted analyzer</a>. The hosted demo sends the selected CSV to its server for temporary in-memory processing. The application does not intentionally save uploaded CSV contents, but hosting infrastructure may process operational metadata. Do not upload confidential, customer-identifying, regulated, or sensitive billing exports.</p>
+<h2>6. Common mistakes to avoid</h2>
+<ul>
+<li>Comparing gross charges in one period with net charges in another.</li>
+<li>Mixing currencies or timezones without normalizing them.</li>
+<li>Assuming a missing resource ID means the charge is invalid.</li>
+<li>Removing credits, taxes, or adjustments without documenting why.</li>
+<li>Interpreting billing amounts as proof of utilization or idle capacity.</li>
+</ul>
+<h2>Further verification</h2>
+<p>Use your provider's official billing documentation to confirm field definitions and pricing semantics for the export format you use. A CSV analysis should guide investigation, not replace invoice reconciliation or provider-specific documentation.</p>
 """
     },
     "cloud-billing-anomaly-detection": {
-        "title": "Cloud Billing Anomaly Detection Explained",
-        "description": "Learn what a cloud cost anomaly is, why statistical outliers need context, and how to investigate them.",
+        "title": "Cloud Billing Anomaly Detection: Methods and Investigation",
+        "description": "Understand cloud cost anomalies, statistical outliers, baselines, and a repeatable investigation workflow.",
         "heading": "Cloud Billing Anomaly Detection Explained",
         "body": """
-<p>A cloud billing anomaly is a cost pattern that differs from an expected baseline. It may indicate a configuration change, workload growth, a pricing change, a one-time operation, or a data issue.</p>
-<h2>Why a statistical flag is only a starting point</h2>
-<p>Methods such as standard deviation and Z-scores compare observations with a statistical baseline. A high score can identify a value worth reviewing, but the score does not explain the business or technical cause. Small datasets, seasonal workloads, and highly variable services can produce misleading signals.</p>
-<h2>A practical investigation sequence</h2>
-<ol><li>Confirm the billing period, currency, and export completeness.</li><li>Compare the charge with the same service and resource over prior periods.</li><li>Check deployments, scaling events, data transfer, storage growth, and pricing changes.</li><li>Correlate the charge with provider metrics and application activity.</li><li>Document the cause and the action taken.</li></ol>
-<h2>Keep human review in the loop</h2>
-<p>Do not automatically stop or resize a resource based only on a billing anomaly. Verify operational impact and obtain the appropriate owner approval first.</p>
-<p><a href="/">Analyze a sample billing CSV with Cloud Cost Linter</a>.</p>
+<p>A cloud billing anomaly is a cost movement that differs from an expected pattern. It may be caused by a genuine workload change, a deployment, a pricing or discount change, an export issue, or normal seasonality. The purpose of anomaly detection is to identify where investigation may be valuable—not to declare that a charge is wrong.</p>
+<h2>1. Define the comparison you want to make</h2>
+<p>An anomaly is meaningful only relative to a baseline. Decide whether you are comparing daily spend with recent days, this month with the same month last year, or a resource with its own historical usage. Choose a consistent scope: account, project, service, region, SKU, or resource.</p>
+<p>Comparing total company spend can hide a large increase in one small service. Conversely, examining individual line items without grouping can create noisy alerts. Select a level that is useful to the team responsible for investigating it.</p>
+<h2>2. Understand common detection approaches</h2>
+<h3>Absolute and percentage thresholds</h3>
+<p>A rule can flag a cost increase above a fixed amount or percentage. It is simple to explain and useful for known budgets, but a percentage threshold can overreact to small baselines. A change from one unit to two units is a 100% increase even when the financial impact is negligible.</p>
+<h3>Rolling averages</h3>
+<p>A rolling average compares the current observation with a recent window. It can reveal gradual changes, but may lag when a workload grows steadily. Choose a window long enough to smooth routine noise without hiding meaningful changes.</p>
+<h3>Standard deviation and Z-scores</h3>
+<p>A Z-score expresses how far an observation is from the mean in units of standard deviation. A large positive score can identify an unusually high value. This approach is easiest to interpret when observations are reasonably stable and the sample is large enough to estimate variation.</p>
+<p>Statistical assumptions matter. A few extreme values can distort the mean and standard deviation. Small samples, intermittent workloads, zero-heavy data, and seasonal patterns can make a simple Z-score misleading. A threshold such as 2.0 is a screening rule, not a universal definition of an anomaly.</p>
+<h2>3. Investigate a flagged cost change</h2>
+<ol>
+<li><strong>Validate the data:</strong> confirm the billing period, currency, export completeness, and whether the provider has revised the invoice.</li>
+<li><strong>Locate the change:</strong> break the total down by account, service, region, SKU, and resource.</li>
+<li><strong>Compare like with like:</strong> use equivalent time windows and account for weekends, month length, and seasonal demand.</li>
+<li><strong>Check technical events:</strong> review deployments, autoscaling, data transfers, backups, storage growth, and scheduled jobs.</li>
+<li><strong>Check commercial events:</strong> review price changes, discount expiry, commitment coverage, credits, and tax adjustments.</li>
+<li><strong>Correlate with telemetry:</strong> compare the cost movement with utilization, request volume, throughput, and application activity.</li>
+<li><strong>Record the conclusion:</strong> note whether the change was expected, unresolved, or actionable, and assign an owner.</li>
+</ol>
+<h2>4. Example: a sudden data-transfer increase</h2>
+<p>Suppose a service's daily data-transfer cost rises from approximately 40 currency units to 95. The increase deserves attention, but the billing record alone does not explain it. Check whether a new region was enabled, an export job ran more frequently, a cache configuration changed, or traffic shifted between availability zones. Then compare transfer volume and application request metrics for the same interval.</p>
+<p>If the increase matches a planned launch, it may be expected. If it coincides with an unintended cross-region data path, the team can evaluate architecture changes. In both cases, the billing anomaly is a lead—not proof of waste.</p>
+<h2>5. Use Cloud Cost Linter as a screening aid</h2>
+<p>Cloud Cost Linter calculates statistical outlier signals from the supplied billing rows and summarizes service spending. Its current interface labels the Z-score threshold and describes flagged values as outliers for review. It does not know your workload calendar, service-level objectives, pricing contract, or operational telemetry.</p>
+<p>Try the <a href="/">analyzer</a> with sample or synthetic data. Treat every result as a candidate for human investigation. Do not automatically stop, resize, or delete a production resource based only on a billing flag.</p>
+<h2>6. Measure whether detection is useful</h2>
+<p>Track how many alerts were investigated, how many represented expected activity, how quickly owners responded, and whether a corrective action was verified. Tune thresholds using observed false positives and missed events. A useful system helps teams find important changes without overwhelming them with noise.</p>
+<h2>Further reading</h2>
+<p>Consult your cloud provider's billing and cost-management documentation for its anomaly detection features, billing export definitions, and pricing-change notices. Provider-native alerts may use additional account and usage context that a standalone CSV cannot access.</p>
 """
     },
     "duplicate-cloud-billing-charges": {
-        "title": "How to Investigate Possible Duplicate Cloud Charges",
-        "description": "A careful process for checking repeated cloud billing records without mistaking legitimate charges for duplicates.",
+        "title": "How to Investigate Possible Duplicate Cloud Billing Charges",
+        "description": "A practical checklist for validating repeated billing line items and distinguishing duplicates from legitimate charges.",
         "heading": "How to Investigate Possible Duplicate Cloud Charges",
         "body": """
-<p>Repeated-looking billing rows are not automatically duplicate charges. Cloud providers may create separate line items for usage intervals, regions, projects, taxes, credits, adjustments, or different billing dimensions.</p>
-<h2>Compare more than the amount</h2>
-<p>Review the record identifiers, service, resource, usage dates, region, SKU, project or account, quantity, unit, and billing export version. Similar amounts on the same date can still represent distinct usage.</p>
-<h2>Validate with the provider</h2>
-<p>Check the detailed invoice and provider billing documentation. If the records still appear duplicated, contact the provider through its official billing support process and retain the invoice and relevant line-item references.</p>
-<h2>Interpret automated flags carefully</h2>
-<p>A duplicate-detection tool can identify candidate rows for review. It cannot confirm that the provider made an error or that a refund is due. Treat flagged values as investigation candidates, not realized savings.</p>
+<p>Two similar rows in a cloud billing export do not automatically mean that a provider charged twice for the same usage. Billing systems often split costs across time intervals, usage types, regions, accounts, discounts, taxes, and adjustments. A duplicate detector can identify records worth comparing, but only invoice and provider-side evidence can establish whether a billing error occurred.</p>
+<h2>1. Understand why similar rows appear</h2>
+<ul>
+<li><strong>Different usage dimensions:</strong> one resource can generate separate compute, storage, request, and data-transfer charges.</li>
+<li><strong>Time slicing:</strong> a provider may emit multiple line items for different usage intervals on the same date.</li>
+<li><strong>Regional or account scope:</strong> similar resource names may exist in different regions, projects, or linked accounts.</li>
+<li><strong>Adjustments:</strong> credits, refunds, taxes, and corrections can appear as separate positive or negative rows.</li>
+<li><strong>Export revisions:</strong> rerunning or combining exports can accidentally include the same source data more than once.</li>
+</ul>
+<h2>2. Compare the full billing context</h2>
+<p>Before treating two rows as duplicates, compare more than the amount and date. Useful fields include invoice ID, line-item ID, account or project, service, SKU, resource ID, region, usage type, quantity, unit, pricing model, billing interval, and export generation time.</p>
+<p>For example, two identical-looking compute charges may represent separate virtual machines with similar names. Two rows for one resource may also represent different usage types. If the export lacks the dimensions needed to distinguish them, mark the case as unresolved rather than assuming an error.</p>
+<h2>3. Follow a repeatable validation process</h2>
+<ol>
+<li>Preserve the original invoice and unmodified billing export.</li>
+<li>Confirm that the rows belong to the same provider, account, invoice, billing period, and currency.</li>
+<li>Compare unique line-item identifiers and all available usage dimensions.</li>
+<li>Check whether the export was appended to an earlier file or imported more than once.</li>
+<li>Review provider documentation for how credits, taxes, discounts, and adjustments are represented.</li>
+<li>Reconcile the suspected rows against the provider's billing console or detailed invoice.</li>
+<li>If the evidence still suggests an error, contact official billing support with invoice and line-item references.</li>
+</ol>
+<h2>4. Keep an evidence record</h2>
+<p>For each candidate, record the invoice number, line-item identifiers, affected period, service and resource, amount and currency, comparison performed, supporting evidence, provider case number, and final outcome. Avoid placing credentials or sensitive customer data in public issue trackers or shared documents.</p>
+<h2>5. Interpret automated duplicate flags carefully</h2>
+<p>Cloud Cost Linter can identify rows that match its duplicate-detection criteria. This is a triage feature: it narrows the set of records that a person may want to inspect. It cannot access your provider's invoice system, determine the contractual meaning of a line item, confirm a provider mistake, or establish that a refund is due.</p>
+<p>For that reason, the interface describes these as <strong>potential duplicate charges</strong> and unconfirmed candidates. Do not report flagged totals as recovered money or verified savings. A candidate becomes a confirmed billing issue only after independent provider-side validation.</p>
+<h2>6. Example: repeated storage line items</h2>
+<p>Imagine two rows show the same resource name, date, and amount. One row may represent provisioned storage capacity while the other represents snapshot storage or API operations. Compare SKU, usage type, quantity, unit, region, and invoice line-item ID. If those details differ, the charges may be legitimate even though the summary fields look alike.</p>
+<h2>What to do next</h2>
+<p>Use the <a href="/">Cloud Cost Linter hosted analyzer</a> with a synthetic or non-sensitive CSV to identify possible matches. The hosted demo transmits the selected CSV to the server for in-memory processing; do not upload confidential or sensitive billing exports. Confirm every suspected duplicate with your provider before disputing a charge or changing a financial record.</p>
 """
     },
     "cloud-rightsizing-basics": {
-        "title": "Cloud Rightsizing: What Billing Data Can and Cannot Prove",
-        "description": "Understand how to combine cloud billing data and utilization metrics before rightsizing resources.",
+        "title": "Cloud Rightsizing: Metrics, Risk, and a Safe Workflow",
+        "description": "A practical guide to combining billing, utilization, reliability, and workload context before rightsizing cloud resources.",
         "heading": "Cloud Rightsizing: What Billing Data Can and Cannot Prove",
         "body": """
-<p>Cloud rightsizing means matching a resource's capacity and configuration to its actual workload requirements. The goal is to reduce unnecessary cost without harming reliability, performance, or future capacity needs.</p>
-<h2>Billing data shows cost, not utilization</h2>
-<p>A high monthly charge may justify investigation, but billing exports usually do not show CPU, memory, disk I/O, network throughput, latency, or service-level objectives. A low charge does not prove that a resource is safe to remove either.</p>
-<h2>Metrics to review</h2>
-<ul><li>CPU and memory utilization across representative peak periods.</li><li>Storage capacity, IOPS, throughput, and growth.</li><li>Network traffic and data-transfer patterns.</li><li>Latency, error rates, queue depth, and workload seasonality.</li><li>Availability, redundancy, and recovery requirements.</li></ul>
-<h2>Make changes safely</h2>
-<p>Build a baseline, identify a reversible change, test it, monitor service health, and keep a rollback plan. Get approval from the workload owner before changing production capacity.</p>
-<h2>Interpret estimates honestly</h2>
-<p>A percentage-based savings estimate is a scenario, not a guarantee. Confirm actual savings against subsequent invoices and operational metrics.</p>
+<p>Cloud rightsizing means matching resource capacity and configuration to real workload requirements. The goal is to reduce unnecessary spend while preserving performance, reliability, security, and room for expected growth. A billing export can show where money is being spent; it usually cannot show whether a resource is oversized or safe to change.</p>
+<h2>1. Start with cost, then collect utilization evidence</h2>
+<p>A high charge can identify a resource worth reviewing, but cost is not a utilization metric. A virtual machine may be expensive because it runs a critical workload at low average CPU, because it has a large memory reservation, or because it is located in a costly region. Each explanation leads to a different decision.</p>
+<p>Collect measurements across representative peak and off-peak periods. A short snapshot can miss batch jobs, monthly processing, seasonal traffic, or disaster-recovery activity.</p>
+<h2>2. Metrics to review by resource type</h2>
+<table><thead><tr><th>Resource type</th><th>Useful evidence</th><th>Important cautions</th></tr></thead><tbody>
+<tr><td>Compute instances</td><td>CPU, memory, network, disk I/O, queue depth</td><td>Peak periods, throttling, burst credits, and failover capacity</td></tr>
+<tr><td>Databases</td><td>CPU, memory, connections, IOPS, latency, storage growth</td><td>Replication, maintenance windows, query bursts, and recovery needs</td></tr>
+<tr><td>Storage</td><td>Capacity, access frequency, retrieval rate, IOPS</td><td>Retention, retrieval fees, durability, and restore objectives</td></tr>
+<tr><td>Containers</td><td>Requests, limits, throttling, restarts, pod utilization</td><td>Scheduling headroom, autoscaling behavior, and noisy neighbors</td></tr>
+<tr><td>Networking</td><td>Throughput, transfer volume, route and region patterns</td><td>Latency, redundancy, and cross-region dependencies</td></tr>
+</tbody></table>
+<h2>3. Include reliability and business requirements</h2>
+<p>Capacity decisions must account for service-level objectives, availability targets, redundancy, recovery time, recovery point, security controls, and planned growth. A resource with low average utilization may be intentionally reserved for failover or a predictable peak. Removing that headroom can increase outage risk.</p>
+<h2>4. Estimate before changing</h2>
+<p>Build a baseline that includes both cost and performance. Identify a candidate change, estimate its financial effect using current provider pricing, and document assumptions. Consider commitment discounts, licensing, data-transfer charges, storage performance tiers, and any migration cost. A lower instance price does not always mean a lower total bill.</p>
+<h2>5. Use a safe change process</h2>
+<ol>
+<li>Choose a workload owner and obtain approval before changing production capacity.</li>
+<li>Review telemetry over a representative business cycle.</li>
+<li>Check dependencies, redundancy, capacity limits, and rollback options.</li>
+<li>Test a reversible change in a non-production environment where practical.</li>
+<li>Roll out gradually and monitor latency, errors, saturation, and availability.</li>
+<li>Rollback promptly if service health degrades.</li>
+<li>Compare subsequent invoices and performance data to verify the actual result.</li>
+</ol>
+<h2>6. Understand estimates and savings claims</h2>
+<p>A percentage-based rightsizing estimate is a scenario, not a forecast or guarantee. The actual result depends on resource type, region, pricing model, utilization, commitments, and operational constraints. Report realized savings only after comparing like-for-like bills and confirming that service performance remains acceptable.</p>
+<h2>7. What Cloud Cost Linter can contribute</h2>
+<p>Cloud Cost Linter summarizes billing records, highlights statistical outliers, identifies potential duplicate rows, and displays an illustrative rightsizing estimate. It does not connect to cloud accounts or retrieve CPU, memory, storage, network, or application telemetry. Billing records alone cannot establish that a resource is idle, oversized, or safe to remove.</p>
+<p>Use the <a href="/">tool</a> to identify cost records for further review, then validate candidates with provider monitoring and the workload owner. The hosted demo sends uploaded CSV content to the server for temporary in-memory processing. Do not upload confidential or sensitive billing data.</p>
+<h2>Further verification</h2>
+<p>Check your provider's official documentation for resource metrics, instance families, storage performance, autoscaling, pricing, and commitment discounts. Rightsizing is a controlled engineering change—not simply choosing the smallest available configuration.</p>
 """
     }
 }
