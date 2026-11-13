@@ -88,6 +88,60 @@ class RenderAppTests(unittest.TestCase):
         for slug in slugs:
             self.assertIn("/guides/" + slug, sitemap)
 
+
+    def test_all_public_pages_and_guides_have_seo_metadata(self):
+        page_slugs = ["privacy", "terms", "about", "contact"]
+        guide_slugs = [
+            "cloud-billing-csv-guide",
+            "cloud-billing-anomaly-detection",
+            "duplicate-cloud-billing-charges",
+            "cloud-rightsizing-basics",
+            "cloud-cost-allocation-tagging",
+            "cloud-budget-forecast-variance",
+            "cloud-data-transfer-costs",
+            "cloud-commitment-discounts",
+        ]
+        for slug in page_slugs:
+            response = self.client.get("/" + slug)
+            self.assertEqual(response.status_code, 200, slug)
+            page = response.get_data(as_text=True)
+            self.assertIn("<title>", page, slug)
+            self.assertIn('name="description"', page, slug)
+            self.assertIn(
+                f'<link rel="canonical" href="https://cloud-cost-linter.onrender.com/{slug}">',
+                page,
+                slug,
+            )
+            self.assertIn('name="robots" content="index,follow"', page, slug)
+
+        for slug in guide_slugs:
+            response = self.client.get("/guides/" + slug)
+            self.assertEqual(response.status_code, 200, slug)
+            page = response.get_data(as_text=True)
+            self.assertIn("<title>", page, slug)
+            self.assertIn('name="description"', page, slug)
+            self.assertIn(
+                f'<link rel="canonical" href="https://cloud-cost-linter.onrender.com/guides/{slug}">',
+                page,
+                slug,
+            )
+            self.assertIn('name="robots" content="index,follow"', page, slug)
+
+    def test_sitemap_contains_all_13_unique_public_urls(self):
+        import xml.etree.ElementTree as ET
+
+        response = self.client.get("/sitemap.xml")
+        self.assertEqual(response.status_code, 200)
+        root = ET.fromstring(response.get_data(as_text=True))
+        namespace = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+        urls = [
+            node.text
+            for node in root.findall("sm:url/sm:loc", namespace)
+        ]
+        self.assertEqual(len(urls), 13)
+        self.assertEqual(len(set(urls)), 13)
+        self.assertIn("https://cloud-cost-linter.onrender.com/", urls)
+
     def test_sample_endpoint(self):
         response = self.client.get("/api/sample")
         self.assertEqual(response.status_code, 200)
