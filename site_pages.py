@@ -520,7 +520,7 @@ article{{background:var(--panel);border:1px solid var(--line);border-radius:16px
 h1{{font-size:clamp(30px,5vw,42px);line-height:1.2;margin:0 0 12px}}h2{{font-size:22px;margin-top:30px;line-height:1.35}}
 p,li{{color:#d4dbe5}}.stamp{{color:var(--muted);font-size:13px}}.back{{display:inline-block;margin-bottom:18px;text-decoration:none}}
 </style></head><body>
-<header><nav aria-label="Main navigation"><a href="/">Tool</a><a href="/about">About</a><a href="/guides/cloud-billing-csv-guide">Guides</a><a href="/contact">Contact</a></nav></header>
+<header><nav aria-label="Main navigation"><a href="/">Tool</a><a href="/about">About</a><a href="/guides">Guides</a><a href="/contact">Contact</a></nav></header>
 <main><a class="back" href="/">← Back to Cloud Cost Linter</a><article><h1>{escape(heading)}</h1>{stamp}{body}</article></main>
 <footer>Cloud Cost Linter · Open-source cloud billing analysis tool · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/contact">Contact</a></footer>
 </body></html>"""
