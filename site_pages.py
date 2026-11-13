@@ -267,6 +267,182 @@ GUIDES = {
 <p>Check your provider's official documentation for resource metrics, instance families, storage performance, autoscaling, pricing, and commitment discounts. Rightsizing is a controlled engineering change—not simply choosing the smallest available configuration.</p>
 """
     }
+    ,
+    "cloud-cost-allocation-tagging": {
+        "title": "Cloud Cost Allocation and Tagging: Build a Reliable Ownership Model",
+        "description": "A practical framework for allocating cloud spend with account structure, tags, shared-cost rules, and coverage checks.",
+        "heading": "Cloud Cost Allocation and Tagging",
+        "body": """
+<p>Cloud cost allocation connects infrastructure spending to the teams, products, environments, and business activities that create or benefit from it. A useful allocation model helps people understand costs and take responsibility for them. It is not simply a matter of adding tags: the model must define ownership, handle shared services, and make missing information visible.</p>
+<h2>1. Decide what you want to allocate</h2>
+<p>Start with the decisions the data should support. Engineering teams may need resource-level costs, product leaders may need product totals, and finance may need monthly cost by business unit. Choose a small set of dimensions that answer real questions, such as owner, application, environment, cost centre, and business unit. Avoid creating dozens of mandatory tags before agreeing how they will be used.</p>
+<h2>2. Establish a consistent taxonomy</h2>
+<p>Write down the allowed values and their meaning. For example, environment values might be production, staging, development, and sandbox. Define whether names are case-sensitive, how legacy values are handled, and who can approve a new value. Prefer stable identifiers for teams and products over display names that change during reorganizations.</p>
+<p>Apply the same definitions across accounts, projects, subscriptions, and infrastructure-as-code templates. Where a provider supports inherited labels or account-level metadata, use them to reduce manual tagging. Keep a documented mapping for resources that cannot carry tags.</p>
+<h2>3. Measure coverage, not just tagged spend</h2>
+<p>A report showing that most spend has an owner can still hide a large unallocated service. Track coverage by both resource count and cost. Separate missing tags, invalid values, conflicting owners, and resources that cannot be tagged. Assign an owner and remediation date to each important gap.</p>
+<table><thead><tr><th>Coverage measure</th><th>What it reveals</th><th>Useful follow-up</th></tr></thead><tbody>
+<tr><td>Spend with a valid owner</td><td>How much cost can be assigned to a responsible team</td><td>Investigate high-cost unowned resources</td></tr>
+<tr><td>Resources with required tags</td><td>Whether tagging is consistently applied</td><td>Fix templates and provisioning workflows</td></tr>
+<tr><td>Invalid or conflicting values</td><td>Whether the taxonomy is being followed</td><td>Publish allowed values and validation rules</td></tr>
+<tr><td>Unallocated shared spend</td><td>How much central cost still needs a policy</td><td>Review shared-cost allocation methods</td></tr>
+</tbody></table>
+<h2>4. Choose a transparent shared-cost method</h2>
+<p>Networking, security, observability, support, and platform services often benefit many teams. Possible methods include leaving costs in a central shared-services bucket, allocating by measured usage, or distributing by an agreed proxy such as active users or compute consumption. The right method depends on the service and the quality of available measurements.</p>
+<p>Document the method, data source, frequency, and limitations. Do not present an estimated allocation as a direct provider charge. Keep both the original bill and any internal allocation view so finance can reconcile the two.</p>
+<h2>5. Reconcile the model each billing cycle</h2>
+<ol>
+<li>Confirm the billing export covers the full period and expected accounts.</li>
+<li>Normalize account, project, team, and environment identifiers.</li>
+<li>Calculate tagged, untagged, invalid, and shared spend separately.</li>
+<li>Compare allocated totals with the provider invoice and explain any differences.</li>
+<li>Review ownership changes and retire obsolete tag values.</li>
+<li>Publish exceptions with an owner and a target date.</li>
+</ol>
+<h2>6. Avoid common allocation mistakes</h2>
+<ul>
+<li>Using free-form team names that differ across accounts.</li>
+<li>Assuming every provider charge maps cleanly to one resource tag.</li>
+<li>Allocating shared costs without explaining the chosen proxy.</li>
+<li>Ignoring credits, taxes, discounts, and marketplace charges.</li>
+<li>Changing historical allocation rules without preserving the old method.</li>
+</ul>
+<h2>How Cloud Cost Linter fits in</h2>
+<p>Cloud Cost Linter can summarize the supported billing rows and help identify cost records for follow-up, but its current input schema does not provide a full allocation engine or validate an organization's tag taxonomy. Preserve provider dimensions in your source export and use your billing platform or a dedicated FinOps data model for detailed ownership reporting. Try the <a href="/">hosted analyzer</a> only with synthetic or non-sensitive data; uploaded CSV content is transmitted to the server for in-memory processing.</p>
+<h2>Further verification</h2>
+<p>Check your cloud provider's current documentation for cost-allocation tags, inherited labels, billing exports, and account-level metadata. Provider behavior differs, and some tags must be activated for billing reports before they appear in exports.</p>
+"""
+    },
+    "cloud-budget-forecast-variance": {
+        "title": "Cloud Budgets, Forecasts, and Variance: A Practical Operating Guide",
+        "description": "Learn to set useful cloud budgets, interpret forecasts, investigate variance, and avoid alert fatigue.",
+        "heading": "Cloud Budgets, Forecasts, and Variance",
+        "body": """
+<p>A cloud budget is a spending limit or planning reference for a defined scope and period. A forecast estimates where spending may land if current patterns continue. Variance is the difference between actual or forecast spend and the budget or baseline. Used together, these tools help teams act before a cost surprise becomes a month-end problem.</p>
+<h2>1. Define the budget scope</h2>
+<p>Specify the owner, account or project, services included, currency, time period, and whether the budget is gross or net of credits and discounts. Align the scope with the decision-maker who can investigate or change the workload. A company-wide budget may be useful for leadership, while team-level budgets make operational ownership clearer.</p>
+<p>Keep one-time migration work, experiments, and recurring production spend distinguishable where possible. If a budget includes taxes, support, marketplace products, or committed-use fees, state that explicitly so comparisons remain consistent.</p>
+<h2>2. Build a baseline before setting a target</h2>
+<p>Use several comparable billing periods and annotate known changes such as launches, seasonal demand, migrations, pricing changes, and commitment purchases. A simple average can be misleading when usage is seasonal or a product is growing quickly. For a new workload, estimate from expected usage and current provider pricing, then revisit the assumptions after real data arrives.</p>
+<h2>3. Understand what a forecast can and cannot say</h2>
+<p>A straight-line forecast projects recent spending forward. It is easy to explain but can overstate a temporary spike or understate a workload that is ramping up. More advanced forecasts may account for seasonality, planned events, usage drivers, and known price changes. Every forecast should state its data window, assumptions, and uncertainty.</p>
+<p>Do not treat a forecast as an invoice. Delayed usage records, credits, refunds, taxes, currency conversion, and provider adjustments can change the final bill. Compare forecasts with the same cost basis and billing scope each time.</p>
+<h2>4. Set alerts that lead to action</h2>
+<p>Useful alerts identify who should act and what they should check. Consider an early warning at a lower percentage of budget, a stronger warning near the expected limit, and an escalation when the forecast exceeds the approved amount. Tune thresholds to the size and volatility of the workload rather than copying one percentage across every team.</p>
+<table><thead><tr><th>Signal</th><th>Question to ask</th><th>Possible response</th></tr></thead><tbody>
+<tr><td>Actual spend rises faster than expected</td><td>Did usage, deployment volume, or pricing change?</td><td>Compare usage drivers and recent releases</td></tr>
+<tr><td>Forecast exceeds budget</td><td>Is the increase planned and funded?</td><td>Update the plan or investigate the variance</td></tr>
+<tr><td>Spend is unusually low</td><td>Is the export incomplete or did a workload stop?</td><td>Check service health and billing coverage</td></tr>
+<tr><td>Repeated alerts have no action</td><td>Is the scope or threshold useful?</td><td>Change ownership, routing, or threshold</td></tr>
+</tbody></table>
+<h2>5. Investigate variance systematically</h2>
+<ol>
+<li>Confirm the billing period, currency, account scope, and export completeness.</li>
+<li>Separate usage changes from price, discount, tax, and credit changes.</li>
+<li>Break down the variance by service, region, project, SKU, and resource where available.</li>
+<li>Compare the timing with deployments, traffic, batch jobs, and business events.</li>
+<li>Record the cause, owner, action, and whether the budget or forecast needs updating.</li>
+</ol>
+<h2>6. Make budget reviews operational</h2>
+<p>Hold a regular review with engineering, finance, and product owners. Focus on the largest material variances, upcoming launches, forecast confidence, and actions that have an accountable owner. Track whether previous actions changed spend and workload outcomes. A budget review should improve decisions, not become a meeting that merely reads a dashboard.</p>
+<h2>7. Avoid misleading comparisons</h2>
+<ul>
+<li>Do not compare a partial month with a complete month without normalizing the period.</li>
+<li>Do not mix amortized and cash-based commitment costs without labelling them.</li>
+<li>Do not interpret a credit or refund as a sustainable reduction in usage cost.</li>
+<li>Do not cut reliability or security controls solely to meet a budget threshold.</li>
+</ul>
+<h2>How Cloud Cost Linter fits in</h2>
+<p>Cloud Cost Linter analyzes a supplied CSV and highlights spending summaries and unusual records. It does not maintain budgets, forecast future bills, or connect to provider billing APIs. Use its output as an investigation input alongside your provider's native budgets, cost explorer, and forecast tools. For the hosted demo, use synthetic or non-sensitive files only; uploaded CSV content is sent to the server for in-memory processing.</p>
+"""
+    },
+    "cloud-data-transfer-costs": {
+        "title": "Cloud Data Transfer Costs: How to Find and Reduce Network Spend Safely",
+        "description": "Understand common cloud data-transfer charges, trace network cost drivers, and evaluate optimizations without harming reliability.",
+        "heading": "Cloud Data Transfer Costs",
+        "body": """
+<p>Cloud data-transfer charges can be difficult to interpret because a bill may separate internet egress, inter-region transfer, cross-zone traffic, content delivery, load balancing, and managed network services. The same application request can generate several billable network events. A useful investigation starts by identifying the exact meter and traffic path rather than assuming all network spend is one category.</p>
+<h2>1. Identify the charge type</h2>
+<p>Read the provider's usage type, SKU, region, source and destination dimensions, quantity, and unit. Determine whether the line represents data leaving a provider, traffic between regions or zones, a private connectivity service, a gateway, or a content delivery service. Names and pricing rules vary by provider and product.</p>
+<p>Check whether the charge is measured in decimal gigabytes or binary gibibytes, whether it is rounded, and whether the export reports gross usage or usage after a free allowance. These details matter when reconciling usage with application metrics.</p>
+<h2>2. Trace the traffic path</h2>
+<p>Map the main request and data paths: users to edge, edge to origin, service to database, service to object storage, and traffic between regions or zones. Look for repeated transfers caused by chatty service calls, cross-region reads, duplicated replication, backup copies, or workloads placed far from their data.</p>
+<p>Correlate billing dimensions with flow logs, load-balancer metrics, CDN reports, storage access logs, and application telemetry. Billing records can identify the cost category but usually cannot reveal which application request caused it.</p>
+<h2>3. Evaluate common optimization options</h2>
+<table><thead><tr><th>Potential change</th><th>When it may help</th><th>What to verify</th></tr></thead><tbody>
+<tr><td>Use a CDN or cache</td><td>Repeated delivery of cacheable content</td><td>Cache hit rate, invalidation, origin load, and edge pricing</td></tr>
+<tr><td>Co-locate compute and data</td><td>Frequent transfers across regions or zones</td><td>Availability, latency, disaster recovery, and resilience</td></tr>
+<tr><td>Reduce chatty service calls</td><td>Many small repeated network requests</td><td>Payload size, batching latency, and failure behavior</td></tr>
+<tr><td>Compress or transform payloads</td><td>Large compressible responses or objects</td><td>CPU overhead, compatibility, and end-to-end latency</td></tr>
+<tr><td>Review replication and backups</td><td>Unnecessary duplicate copies or excessive frequency</td><td>Retention, recovery objectives, and compliance</td></tr>
+</tbody></table>
+<h2>4. Model total cost, not just egress price</h2>
+<p>A change that reduces one transfer meter may increase another cost. A CDN can add request and cache-fill charges. Moving a database closer to an application may change compute pricing or resilience. Compression can increase CPU use. Reducing replication can affect recovery objectives. Estimate the complete design cost and operational trade-offs before making a change.</p>
+<h2>5. Use a safe investigation workflow</h2>
+<ol>
+<li>Choose a billing period and reconcile network charges with the provider invoice.</li>
+<li>Group usage by meter, region, source, destination, and service where the export supports it.</li>
+<li>Compare usage volume with flow logs, CDN reports, and application traffic metrics.</li>
+<li>Identify a specific traffic path and propose one reversible change.</li>
+<li>Estimate all affected charges and review reliability, latency, security, and recovery requirements.</li>
+<li>Test with a representative workload and monitor both performance and cost.</li>
+<li>Compare subsequent bills using the same units, scope, and pricing basis.</li>
+</ol>
+<h2>6. Common pitfalls</h2>
+<ul>
+<li>Assuming all outbound data is charged at one universal rate.</li>
+<li>Ignoring inter-region, inter-zone, gateway, or CDN request charges.</li>
+<li>Comparing traffic volumes measured in different units.</li>
+<li>Disabling replication or redundancy without reviewing recovery needs.</li>
+<li>Claiming savings from a traffic reduction before the bill confirms it.</li>
+</ul>
+<h2>How Cloud Cost Linter fits in</h2>
+<p>Cloud Cost Linter can summarize cost rows and flag unusual records when the export includes network services. It does not inspect packet flows, identify application endpoints, or calculate provider-specific network prices. Preserve usage type, region, and SKU fields in the source data and use provider network telemetry for root-cause analysis. Use synthetic or non-sensitive files with the hosted demo because uploaded CSV content is transmitted to the server for in-memory processing.</p>
+<h2>Further verification</h2>
+<p>Consult the current network pricing pages and data-transfer documentation for your provider, region, service, and pricing agreement. Network rates and free allowances can differ substantially across products and locations.</p>
+"""
+    },
+    "cloud-commitment-discounts": {
+        "title": "Cloud Commitment Discounts: Reservations, Savings Plans, and Break-Even Analysis",
+        "description": "Compare cloud commitment discounts with on-demand usage, evaluate utilization risk, and build a careful purchase decision.",
+        "heading": "Cloud Commitment Discounts and Break-Even Analysis",
+        "body": """
+<p>Cloud providers offer commitment-based discounts in exchange for agreeing to a level of spend, usage, or capacity over a defined term. Depending on the product, these may be called reservations, savings plans, committed-use discounts, or capacity reservations. They can reduce eligible costs, but they also introduce utilization, flexibility, and financial risks.</p>
+<h2>1. Distinguish a price discount from capacity assurance</h2>
+<p>A pricing commitment may lower the rate applied to eligible usage without guaranteeing that capacity will be available. A capacity reservation may help secure resources in a particular location or configuration, but it may not provide the same discount as a separate pricing commitment. Read the exact product terms before comparing offers.</p>
+<h2>2. Understand the commitment dimensions</h2>
+<p>Check the commitment amount, term, payment option, eligible services, regions, instance families, usage flexibility, sharing rules, and cancellation or modification limits. Some commitments are measured per hour, some by total spend, and others by specific capacity attributes. A discount only applies when actual usage matches the eligible scope under the provider's rules.</p>
+<h2>3. Estimate a realistic eligible baseline</h2>
+<p>Use historical usage over a representative period and separate stable production workloads from experiments, seasonal workloads, migrations, and services likely to change. Exclude temporary spikes unless they are expected to continue. Model growth and contraction scenarios rather than assuming that last month's usage will repeat.</p>
+<p>Check whether the historical cost view is based on on-demand rates, amortized commitment costs, or net effective rates. Mixing these views can make an offer appear more attractive than it is.</p>
+<h2>4. Calculate break-even and utilization risk</h2>
+<p>Compare the cost of eligible usage at on-demand rates with the commitment's total cost over the same period. Include upfront payments, recurring fees, expected eligible usage, and any residual on-demand usage. A simplified utilization measure is the portion of committed value or capacity actually consumed by eligible workloads, but the provider's own billing definition should be used for the final calculation.</p>
+<table><thead><tr><th>Scenario</th><th>What to model</th><th>Decision risk</th></tr></thead><tbody>
+<tr><td>Stable baseline</td><td>Expected eligible usage remains near the observed level</td><td>Check that workload and product scope remain stable</td></tr>
+<tr><td>Usage declines</td><td>Eligible demand falls during the term</td><td>Unused commitment may erase expected savings</td></tr>
+<tr><td>Usage grows</td><td>Demand exceeds the committed amount</td><td>Incremental usage may still be billed at on-demand rates</td></tr>
+<tr><td>Architecture changes</td><td>Workload moves region, family, or service</td><td>Existing commitment may not match the new footprint</td></tr>
+</tbody></table>
+<h2>5. Compare flexibility and operational risk</h2>
+<p>A larger discount is not automatically the best choice. A flexible commitment may have a lower discount but fit changing workloads better. Review term length, exchange or modification rules, sharing across accounts, regional restrictions, and what happens when a service is retired. Consider the organization's cash-flow policy and approval process for long-term commitments.</p>
+<h2>6. A practical decision checklist</h2>
+<ol>
+<li>Confirm the exact product, eligibility rules, term, payment option, and cancellation terms.</li>
+<li>Build an eligible usage baseline from reconciled billing and workload forecasts.</li>
+<li>Model conservative, expected, and growth scenarios.</li>
+<li>Calculate total commitment cost and residual on-demand spend for each scenario.</li>
+<li>Check flexibility across accounts, regions, services, and resource families.</li>
+<li>Obtain finance and workload-owner approval before purchasing.</li>
+<li>Track utilization, coverage, effective discount, and unused commitment regularly.</li>
+</ol>
+<h2>7. Monitor after purchase</h2>
+<p>Review commitment utilization and coverage separately. High utilization can indicate that the commitment is being consumed; coverage shows how much eligible usage benefits from a commitment. A commitment can be fully utilized while a substantial amount of other eligible usage remains on demand. Investigate low utilization early and use only the adjustment options permitted by the provider's contract.</p>
+<h2>How Cloud Cost Linter fits in</h2>
+<p>Cloud Cost Linter can summarize supported cost rows and identify unusual records, but it does not calculate commitment eligibility, optimize reservations, or model provider-specific discount terms. Use the provider's commitment recommendations and detailed billing exports for the decision. Do not treat an anomaly or rightsizing estimate as evidence that a commitment should be purchased. Use synthetic or non-sensitive CSV files with the hosted demo because uploaded content is transmitted to the server for in-memory processing.</p>
+<h2>Further verification</h2>
+<p>Review the current commitment documentation and pricing calculator for the exact provider, service, region, and payment option. Commitment products and exchange rules change, so verify current terms before making a financial commitment.</p>
+"""
+    }
 }
 
 def _layout(title, description, heading, body, path, updated=None):
