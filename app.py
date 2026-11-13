@@ -80,6 +80,14 @@ def sitemap():
     xml = '<?xml version="1.0" encoding="UTF-8"?>' + '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + urls + "</urlset>"
     return Response(xml, mimetype="application/xml")
 
+@app.get("/google2e731cb1546f4a5a.html")
+def google_search_console_verification():
+    return Response(
+        "google-site-verification: google2e731cb1546f4a5a.html",
+        mimetype="text/html",
+    )
+
+
 @app.get("/<slug>")
 def public_page(slug):
     if slug not in SITE_PAGE_SLUGS:
