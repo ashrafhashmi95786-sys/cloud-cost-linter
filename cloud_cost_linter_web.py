@@ -444,11 +444,20 @@ INDEX_HTML = """<!DOCTYPE html>
       padding: 1.5rem;
       text-align: center;
       font-size: 0.75rem;
-      color: var(--text-dim);
+      color: #cbd5e1;
       margin-top: auto;
     }
   
     /* Responsive layout improvements */
+    footer a {
+      color: #67e8f9;
+      font-weight: 600;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+    footer a:hover, footer a:focus-visible { color: #a5f3fc; }
+    footer a:focus-visible { outline: 2px solid #67e8f9; outline-offset: 3px; border-radius: 2px; }
     @media (max-width: 760px) {
       header { padding: 0.85rem 1rem; }
       .header-inner { align-items: flex-start; }
