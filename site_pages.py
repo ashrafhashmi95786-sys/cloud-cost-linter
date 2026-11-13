@@ -84,9 +84,10 @@ PAGES = {
         "heading": "Contact",
         "updated": "November 13, 2026",
         "body": """
-<p>Cloud Cost Linter is an open-source project. The best way to contact the project maintainers is through GitHub, where questions and technical reports can be tracked transparently.</p>
-<h2>Report a bug or request a feature</h2>
-<p>Open an issue in the <a href="https://github.com/ashrafhashmi95786-sys/cloud-cost-linter/issues">Cloud Cost Linter GitHub issue tracker</a>.</p>
+<p>Cloud Cost Linter is an open-source project. For questions, support, bug reports, or feature requests, you can contact the project team by email.</p>
+<h2>Email us</h2>
+<p><a href="mailto:ashwebtools95@gmail.com">ashwebtools95@gmail.com</a></p>
+<p>Please describe the issue clearly. Do not email passwords, API keys, access tokens, customer details, or confidential billing exports.</p>
 <h2>Contribute to the project</h2>
 <p>Review the <a href="https://github.com/ashrafhashmi95786-sys/cloud-cost-linter">source repository</a> and submit a pull request with a clear description and relevant tests.</p>
 <h2>Protect your information</h2>
