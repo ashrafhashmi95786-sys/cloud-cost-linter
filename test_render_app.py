@@ -24,6 +24,23 @@ class RenderAppTests(unittest.TestCase):
         self.assertNotIn("Your files never leave your computer", page)
         self.assertNotIn("100% Local · Zero Telemetry", page)
 
+    def test_robots_txt_has_real_newlines_and_excludes_api(self):
+        response = self.client.get("/robots.txt")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.mimetype.startswith("text/plain"))
+        body = response.get_data(as_text=True)
+        self.assertIn("User-agent: *\n", body)
+        self.assertIn("Allow: /\n", body)
+        self.assertIn("Disallow: /api/\n", body)
+        self.assertIn("Sitemap: https://cloud-cost-linter.onrender.com/sitemap.xml\n", body)
+        self.assertNotIn("\\n", body)
+
+    def test_hosted_privacy_notice_has_no_literal_newline_escape(self):
+        response = self.client.get("/")
+        page = response.get_data(as_text=True)
+        self.assertIn("Do not upload confidential", page)
+        self.assertNotIn("\\n    <!-- Upload Zone -->", page)
+
     def test_sample_endpoint(self):
         response = self.client.get("/api/sample")
         self.assertEqual(response.status_code, 200)
