@@ -70,7 +70,7 @@ def index():
 
 @app.get("/robots.txt")
 def robots_txt():
-    body = "User-agent: *\\nAllow: /\\nDisallow: /api/\\nSitemap: https://cloud-cost-linter.onrender.com/sitemap.xml\\n"
+    body = "User-agent: *\nAllow: /\nDisallow: /api/\nSitemap: https://cloud-cost-linter.onrender.com/sitemap.xml\n"
     return Response(body, mimetype="text/plain")
 
 @app.get("/sitemap.xml")
