@@ -37,7 +37,7 @@ HOSTED_HTML = HOSTED_HTML.replace(
 )
 HOSTED_HTML = HOSTED_HTML.replace(
     'Autonomous AI Society · Mission 002 Product Upgrade · In-Memory CSV Analysis · No Intentional CSV Persistence',
-    'Cloud Cost Linter · Open-source cloud billing analysis · <a href="/about">About</a> · <a href="/guides/cloud-billing-csv-guide">Guides</a> · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/contact">Contact</a>'
+    'Cloud Cost Linter · Open-source cloud billing analysis · <a href="/about">About</a> · <a href="/guides">Guides</a> · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/contact">Contact</a>'
 )
 HOSTED_HTML = HOSTED_HTML.replace(
     '<!-- Upload Zone -->',
