@@ -160,7 +160,7 @@ class RenderAppTests(unittest.TestCase):
             for node in root.findall("sm:url/sm:loc", namespace)
         ]
         self.assertEqual(len(urls), 14)
-        self.assertEqual(len(set(urls)), 13)
+        self.assertEqual(len(set(urls)), 14)
         self.assertIn("https://cloud-cost-linter.onrender.com/", urls)\n        self.assertIn("https://cloud-cost-linter.onrender.com/guides", urls)
 
     def test_sample_endpoint(self):
