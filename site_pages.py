@@ -148,6 +148,13 @@ GUIDES = {
 </ul>
 <h2>Further verification</h2>
 <p>Use your provider's official billing documentation to confirm field definitions and pricing semantics for the export format you use. A CSV analysis should guide investigation, not replace invoice reconciliation or provider-specific documentation.</p>
+<h2>Official provider documentation</h2>
+<p>For provider-specific field definitions, billing behavior, pricing, and recommendations, consult the current official documentation:</p>
+<ul>
+<li><a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/" rel="noopener noreferrer">AWS Billing and Cost Management</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/cost-management-billing/costs/tutorial-improved-exports" rel="noopener noreferrer">Azure Cost Management exports</a></li>
+<li><a href="https://docs.cloud.google.com/billing/docs/how-to/export-data-bigquery" rel="noopener noreferrer">Google Cloud Billing export to BigQuery</a></li>
+</ul>
 """
     },
     "cloud-billing-anomaly-detection": {
@@ -187,6 +194,13 @@ GUIDES = {
 <p>Track how many alerts were investigated, how many represented expected activity, how quickly owners responded, and whether a corrective action was verified. Tune thresholds using observed false positives and missed events. A useful system helps teams find important changes without overwhelming them with noise.</p>
 <h2>Further reading</h2>
 <p>Consult your cloud provider's billing and cost-management documentation for its anomaly detection features, billing export definitions, and pricing-change notices. Provider-native alerts may use additional account and usage context that a standalone CSV cannot access.</p>
+<h2>Official provider documentation</h2>
+<p>For provider-specific field definitions, billing behavior, pricing, and recommendations, consult the current official documentation:</p>
+<ul>
+<li><a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/view-billing-dashboard.html" rel="noopener noreferrer">AWS billing dashboard and cost anomaly monitoring</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/cost-management-billing/costs/overview-cost-management" rel="noopener noreferrer">Microsoft Cost Management overview</a></li>
+<li><a href="https://docs.cloud.google.com/billing/docs/how-to/manage-anomalies" rel="noopener noreferrer">Google Cloud cost anomalies</a></li>
+</ul>
 """
     },
     "duplicate-cloud-billing-charges": {
@@ -225,6 +239,13 @@ GUIDES = {
 <p>Imagine two rows show the same resource name, date, and amount. One row may represent provisioned storage capacity while the other represents snapshot storage or API operations. Compare SKU, usage type, quantity, unit, region, and invoice line-item ID. If those details differ, the charges may be legitimate even though the summary fields look alike.</p>
 <h2>What to do next</h2>
 <p>Use the <a href="/">Cloud Cost Linter hosted analyzer</a> with a synthetic or non-sensitive CSV to identify possible matches. The hosted demo transmits the selected CSV to the server for in-memory processing; do not upload confidential or sensitive billing exports. Confirm every suspected duplicate with your provider before disputing a charge or changing a financial record.</p>
+<h2>Official provider documentation</h2>
+<p>For provider-specific field definitions, billing behavior, pricing, and recommendations, consult the current official documentation:</p>
+<ul>
+<li><a href="https://docs.aws.amazon.com/us_en/awsaccountbilling/latest/aboutv2/differences-billing-data-cost-explorer-data.html" rel="noopener noreferrer">AWS: differences between billing and Cost Explorer data</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/cost-management-billing/costs/understand-cost-mgt-data" rel="noopener noreferrer">Azure: understand cost management data</a></li>
+<li><a href="https://docs.cloud.google.com/billing/docs/how-to/export-data-bigquery" rel="noopener noreferrer">Google Cloud Billing export and detailed cost records</a></li>
+</ul>
 """
     },
     "cloud-rightsizing-basics": {
@@ -265,6 +286,12 @@ GUIDES = {
 <p>Use the <a href="/">tool</a> to identify cost records for further review, then validate candidates with provider monitoring and the workload owner. The hosted demo sends uploaded CSV content to the server for temporary in-memory processing. Do not upload confidential or sensitive billing data.</p>
 <h2>Further verification</h2>
 <p>Check your provider's official documentation for resource metrics, instance families, storage performance, autoscaling, pricing, and commitment discounts. Rightsizing is a controlled engineering change—not simply choosing the smallest available configuration.</p>
+<h2>Official provider documentation</h2>
+<p>For provider-specific field definitions, billing behavior, pricing, and recommendations, consult the current official documentation:</p>
+<ul>
+<li><a href="https://docs.aws.amazon.com/cost-management/latest/userguide/what-is-costmanagement.html" rel="noopener noreferrer">AWS cost optimization and rightsizing resources</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/cost-management-billing/costs/overview-cost-management" rel="noopener noreferrer">Microsoft Cost Management and Azure cost recommendations</a></li>
+</ul>
 """
     }
     ,
@@ -311,6 +338,13 @@ GUIDES = {
 <p>Cloud Cost Linter can summarize the supported billing rows and help identify cost records for follow-up, but its current input schema does not provide a full allocation engine or validate an organization's tag taxonomy. Preserve provider dimensions in your source export and use your billing platform or a dedicated FinOps data model for detailed ownership reporting. Try the <a href="/">hosted analyzer</a> only with synthetic or non-sensitive data; uploaded CSV content is transmitted to the server for in-memory processing.</p>
 <h2>Further verification</h2>
 <p>Check your cloud provider's current documentation for cost-allocation tags, inherited labels, billing exports, and account-level metadata. Provider behavior differs, and some tags must be activated for billing reports before they appear in exports.</p>
+<h2>Official provider documentation</h2>
+<p>For provider-specific field definitions, billing behavior, pricing, and recommendations, consult the current official documentation:</p>
+<ul>
+<li><a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html" rel="noopener noreferrer">AWS cost allocation tags</a></li>
+<li><a href="https://learn.microsoft.com/azure/cost-management-billing/costs/allocate-costs" rel="noopener noreferrer">Azure cost allocation</a></li>
+<li><a href="https://docs.cloud.google.com/billing/docs/how-to/export-data-bigquery" rel="noopener noreferrer">Google Cloud Billing export fields, including labels</a></li>
+</ul>
 """
     },
     "cloud-budget-forecast-variance": {
@@ -354,6 +388,13 @@ GUIDES = {
 </ul>
 <h2>How Cloud Cost Linter fits in</h2>
 <p>Cloud Cost Linter analyzes a supplied CSV and highlights spending summaries and unusual records. It does not maintain budgets, forecast future bills, or connect to provider billing APIs. Use its output as an investigation input alongside your provider's native budgets, cost explorer, and forecast tools. For the hosted demo, use synthetic or non-sensitive files only; uploaded CSV content is sent to the server for in-memory processing.</p>
+<h2>Official provider documentation</h2>
+<p>For provider-specific field definitions, billing behavior, pricing, and recommendations, consult the current official documentation:</p>
+<ul>
+<li><a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/view-billing-dashboard.html" rel="noopener noreferrer">AWS budgets and cost monitoring</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/cost-management-billing/costs/overview-cost-management" rel="noopener noreferrer">Microsoft Cost Management budgets and alerts</a></li>
+<li><a href="https://docs.cloud.google.com/billing/docs/how-to/budgets" rel="noopener noreferrer">Google Cloud budgets and budget alerts</a></li>
+</ul>
 """
     },
     "cloud-data-transfer-costs": {
@@ -400,6 +441,13 @@ GUIDES = {
 <p>Cloud Cost Linter can summarize cost rows and flag unusual records when the export includes network services. It does not inspect packet flows, identify application endpoints, or calculate provider-specific network prices. Preserve usage type, region, and SKU fields in the source data and use provider network telemetry for root-cause analysis. Use synthetic or non-sensitive files with the hosted demo because uploaded CSV content is transmitted to the server for in-memory processing.</p>
 <h2>Further verification</h2>
 <p>Consult the current network pricing pages and data-transfer documentation for your provider, region, service, and pricing agreement. Network rates and free allowances can differ substantially across products and locations.</p>
+<h2>Official provider documentation</h2>
+<p>For provider-specific field definitions, billing behavior, pricing, and recommendations, consult the current official documentation:</p>
+<ul>
+<li><a href="https://cloud.google.com/vpc/network-pricing" rel="noopener noreferrer">Google Cloud network pricing</a></li>
+<li><a href="https://azure.microsoft.com/en-us/pricing/details/bandwidth/" rel="noopener noreferrer">Azure bandwidth pricing</a></li>
+<li><a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/" rel="noopener noreferrer">AWS Billing and Cost Management documentation</a></li>
+</ul>
 """
     },
     "cloud-commitment-discounts": {
@@ -441,6 +489,13 @@ GUIDES = {
 <p>Cloud Cost Linter can summarize supported cost rows and identify unusual records, but it does not calculate commitment eligibility, optimize reservations, or model provider-specific discount terms. Use the provider's commitment recommendations and detailed billing exports for the decision. Do not treat an anomaly or rightsizing estimate as evidence that a commitment should be purchased. Use synthetic or non-sensitive CSV files with the hosted demo because uploaded content is transmitted to the server for in-memory processing.</p>
 <h2>Further verification</h2>
 <p>Review the current commitment documentation and pricing calculator for the exact provider, service, region, and payment option. Commitment products and exchange rules change, so verify current terms before making a financial commitment.</p>
+<h2>Official provider documentation</h2>
+<p>For provider-specific field definitions, billing behavior, pricing, and recommendations, consult the current official documentation:</p>
+<ul>
+<li><a href="https://docs.aws.amazon.com/cost-management/latest/userguide/what-is-costmanagement.html" rel="noopener noreferrer">AWS Savings Plans and commitment management</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/cost-management-billing/costs/tutorial-improved-exports" rel="noopener noreferrer">Azure exports: actual and amortized cost data</a></li>
+<li><a href="https://docs.cloud.google.com/billing/docs/how-to/export-data-bigquery" rel="noopener noreferrer">Google Cloud committed use discount billing export</a></li>
+</ul>
 """
     }
 }
