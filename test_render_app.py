@@ -127,7 +127,28 @@ class RenderAppTests(unittest.TestCase):
             )
             self.assertIn('name="robots" content="index,follow"', page, slug)
 
-    def test_sitemap_contains_all_13_unique_public_urls(self):
+    def test_guides_index_lists_all_eight_guides_and_has_seo_metadata(self):
+        response = self.client.get("/guides")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.mimetype.startswith("text/html"))
+        page = response.get_data(as_text=True)
+        self.assertIn("<title>Cloud FinOps Guides and Tutorials | Cloud Cost Linter</title>", page)
+        self.assertIn('name="description"', page)
+        self.assertIn('rel="canonical" href="https://cloud-cost-linter.onrender.com/guides"', page)
+        self.assertIn('name="robots" content="index,follow"', page)
+        for slug in [
+            "cloud-billing-csv-guide",
+            "cloud-billing-anomaly-detection",
+            "duplicate-cloud-billing-charges",
+            "cloud-rightsizing-basics",
+            "cloud-cost-allocation-tagging",
+            "cloud-budget-forecast-variance",
+            "cloud-data-transfer-costs",
+            "cloud-commitment-discounts",
+        ]:
+            self.assertIn(f'href="/guides/{slug}"', page)
+
+    def test_sitemap_contains_all_14_unique_public_urls(self):
         import xml.etree.ElementTree as ET
 
         response = self.client.get("/sitemap.xml")
@@ -138,9 +159,10 @@ class RenderAppTests(unittest.TestCase):
             node.text
             for node in root.findall("sm:url/sm:loc", namespace)
         ]
-        self.assertEqual(len(urls), 13)
-        self.assertEqual(len(set(urls)), 13)
+        self.assertEqual(len(urls), 14)
+        self.assertEqual(len(set(urls)), 14)
         self.assertIn("https://cloud-cost-linter.onrender.com/", urls)
+        self.assertIn("https://cloud-cost-linter.onrender.com/guides", urls)
 
     def test_sample_endpoint(self):
         response = self.client.get("/api/sample")

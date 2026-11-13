@@ -11,7 +11,7 @@ from werkzeug.exceptions import RequestEntityTooLarge
 
 from cloud_cost_linter import CloudCostLinter, CloudCostLinterError
 from cloud_cost_linter_web import INDEX_HTML, MAX_UPLOAD_SIZE, _safe_download_stem
-from site_pages import GUIDE_SLUGS, SITE_PAGE_SLUGS, render_site_page
+from site_pages import GUIDE_SLUGS, SITE_PAGE_SLUGS, render_guides_index, render_site_page
 
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = MAX_UPLOAD_SIZE + (64 * 1024)
@@ -75,7 +75,7 @@ def robots_txt():
 
 @app.get("/sitemap.xml")
 def sitemap():
-    paths = ["/"] + ["/" + slug for slug in SITE_PAGE_SLUGS] + ["/guides/" + slug for slug in GUIDE_SLUGS]
+    paths = ["/"] + ["/" + slug for slug in SITE_PAGE_SLUGS] + ["/guides"] + ["/guides/" + slug for slug in GUIDE_SLUGS]
     urls = "".join("<url><loc>https://cloud-cost-linter.onrender.com" + path + "</loc></url>" for path in paths)
     xml = '<?xml version="1.0" encoding="UTF-8"?>' + '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + urls + "</urlset>"
     return Response(xml, mimetype="application/xml")
@@ -93,6 +93,10 @@ def public_page(slug):
     if slug not in SITE_PAGE_SLUGS:
         return Response("Page not found.", status=404, mimetype="text/plain")
     return Response(render_site_page(slug), mimetype="text/html")
+
+@app.get("/guides")
+def guides_index():
+    return Response(render_guides_index(), mimetype="text/html")
 
 @app.get("/guides/<slug>")
 def guide_page(slug):
