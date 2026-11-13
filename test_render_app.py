@@ -63,6 +63,24 @@ class RenderAppTests(unittest.TestCase):
             "google-site-verification: google2e731cb1546f4a5a.html",
         )
 
+
+    def test_four_new_finops_guides_are_routed_and_in_sitemap(self):
+        slugs = [
+            "cloud-cost-allocation-tagging",
+            "cloud-budget-forecast-variance",
+            "cloud-data-transfer-costs",
+            "cloud-commitment-discounts",
+        ]
+        for slug in slugs:
+            response = self.client.get("/guides/" + slug)
+            self.assertEqual(response.status_code, 200, slug)
+            page = response.get_data(as_text=True)
+            self.assertIn("<h1>", page)
+            self.assertIn("Cloud Cost Linter", page)
+        sitemap = self.client.get("/sitemap.xml").get_data(as_text=True)
+        for slug in slugs:
+            self.assertIn("/guides/" + slug, sitemap)
+
     def test_sample_endpoint(self):
         response = self.client.get("/api/sample")
         self.assertEqual(response.status_code, 200)
