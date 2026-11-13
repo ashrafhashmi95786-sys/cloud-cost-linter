@@ -29,7 +29,7 @@ PAGES = {
 <h2>External services</h2>
 <p>The hosted demo runs on Render. Your connection to the hosted website and its infrastructure is subject to the hosting provider's terms and privacy information as well as this application-level notice.</p>
 <h2>Your choices and questions</h2>
-<p>You can use the local version of the open-source tool to process files on your own computer. For questions or privacy-related requests, contact the project through the <a href="https://github.com/ashrafhashmi95786-sys/cloud-cost-linter/issues">GitHub issue tracker</a>. Do not post private billing data in a public issue.</p>
+<p>You can use the local version of the open-source tool to process files on your own computer. For questions or privacy-related requests, email <a href="mailto:ashwebtools95@gmail.com">ashwebtools95@gmail.com</a>. Do not email passwords, API keys, access tokens, customer details, or confidential billing exports.</p>
 """
     },
     "terms": {
@@ -314,7 +314,7 @@ GUIDES = {
 """
     },
     "cloud-budget-forecast-variance": {
-        "title": "Cloud Budgets, Forecasts, and Variance: A Practical Operating Guide",
+        "title": "Cloud Budgets and Forecast Variance: A Practical Guide",
         "description": "Learn to set useful cloud budgets, interpret forecasts, investigate variance, and avoid alert fatigue.",
         "heading": "Cloud Budgets, Forecasts, and Variance",
         "body": """
@@ -357,7 +357,7 @@ GUIDES = {
 """
     },
     "cloud-data-transfer-costs": {
-        "title": "Cloud Data Transfer Costs: How to Find and Reduce Network Spend Safely",
+        "title": "Cloud Data Transfer Costs: A Practical Guide",
         "description": "Understand common cloud data-transfer charges, trace network cost drivers, and evaluate optimizations without harming reliability.",
         "heading": "Cloud Data Transfer Costs",
         "body": """
@@ -403,7 +403,7 @@ GUIDES = {
 """
     },
     "cloud-commitment-discounts": {
-        "title": "Cloud Commitment Discounts: Reservations, Savings Plans, and Break-Even Analysis",
+        "title": "Cloud Commitment Discounts: A Practical Guide",
         "description": "Compare cloud commitment discounts with on-demand usage, evaluate utilization risk, and build a careful purchase decision.",
         "heading": "Cloud Commitment Discounts and Break-Even Analysis",
         "body": """
