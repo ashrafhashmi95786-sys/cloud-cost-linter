@@ -11,6 +11,7 @@ from werkzeug.exceptions import RequestEntityTooLarge
 
 from cloud_cost_linter import CloudCostLinter, CloudCostLinterError
 from cloud_cost_linter_web import INDEX_HTML, MAX_UPLOAD_SIZE, _safe_download_stem
+from site_pages import GUIDE_SLUGS, SITE_PAGE_SLUGS, render_site_page
 
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = MAX_UPLOAD_SIZE + (64 * 1024)
@@ -26,6 +27,17 @@ HOSTED_HTML = (
     .replace("Strict local parsing · Max 10MB", "Server-side processing · Max 10MB")
     .replace("Autonomous AI Society · Mission 002 Product Upgrade · Zero-Budget FinOps Engineering · 100% Offline & Private",
              "Cloud Cost Linter · Hosted demo. Uploaded CSV content is processed in memory and is not intentionally saved by the application.")
+)
+HOSTED_HTML = HOSTED_HTML.replace(
+    '<title>Cloud Cost Linter — Cloud Billing Audit</title>',
+    '<title>Cloud Cost Linter — Free Cloud Billing CSV Analyzer</title>'
+).replace(
+    '</head>',
+    '<link rel="canonical" href="https://cloud-cost-linter.onrender.com/"><meta name="robots" content="index,follow"></head>'
+)
+HOSTED_HTML = HOSTED_HTML.replace(
+    'Autonomous AI Society · Mission 002 Product Upgrade · In-Memory CSV Analysis · No Intentional CSV Persistence',
+    'Cloud Cost Linter · Open-source cloud billing analysis · <a href="/about">About</a> · <a href="/guides/cloud-billing-csv-guide">Guides</a> · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/contact">Contact</a>'
 )
 HOSTED_HTML = HOSTED_HTML.replace(
     '<!-- Upload Zone -->',
@@ -55,6 +67,30 @@ def too_large(_error):
 @app.get("/index.html")
 def index():
     return Response(HOSTED_HTML, mimetype="text/html")
+
+@app.get("/robots.txt")
+def robots_txt():
+    body = "User-agent: *\nAllow: /\nDisallow: /api/\nSitemap: https://cloud-cost-linter.onrender.com/sitemap.xml\n"
+    return Response(body, mimetype="text/plain")
+
+@app.get("/sitemap.xml")
+def sitemap():
+    paths = ["/"] + ["/" + slug for slug in SITE_PAGE_SLUGS] + ["/guides/" + slug for slug in GUIDE_SLUGS]
+    urls = "".join("<url><loc>https://cloud-cost-linter.onrender.com" + path + "</loc></url>" for path in paths)
+    xml = '<?xml version="1.0" encoding="UTF-8"?>' + '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + urls + "</urlset>"
+    return Response(xml, mimetype="application/xml")
+
+@app.get("/<slug>")
+def public_page(slug):
+    if slug not in SITE_PAGE_SLUGS:
+        return Response("Page not found.", status=404, mimetype="text/plain")
+    return Response(render_site_page(slug), mimetype="text/html")
+
+@app.get("/guides/<slug>")
+def guide_page(slug):
+    if slug not in GUIDE_SLUGS:
+        return Response("Page not found.", status=404, mimetype="text/plain")
+    return Response(render_site_page(slug), mimetype="text/html")
 
 @app.get("/social-preview.svg")
 def social_preview():
