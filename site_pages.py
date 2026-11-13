@@ -479,3 +479,49 @@ def render_site_page(slug):
 
 SITE_PAGE_SLUGS = tuple(PAGES.keys())
 GUIDE_SLUGS = tuple(GUIDES.keys())
+
+
+def render_guides_index():
+    """Render a browsable index of all original FinOps guides."""
+    cards = []
+    for slug, guide in GUIDES.items():
+        cards.append(
+            '<article class="guide-card">'
+            f'<h2><a href="/guides/{escape(slug, quote=True)}">{escape(guide["heading"])}</a></h2>'
+            f'<p>{escape(guide["description"])}</p>'
+            f'<a class="read-link" href="/guides/{escape(slug, quote=True)}">Read guide <span aria-hidden="true">→</span></a>'
+            '</article>'
+        )
+    return f"""<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cloud FinOps Guides and Tutorials | Cloud Cost Linter</title>
+<meta name="description" content="Browse practical cloud FinOps guides covering billing CSVs, anomaly detection, duplicate charges, rightsizing, cost allocation, forecasting, data transfer, and commitment discounts.">
+<link rel="canonical" href="{BASE}/guides"><meta name="robots" content="index,follow">
+<meta property="og:type" content="website"><meta property="og:title" content="Cloud FinOps Guides | Cloud Cost Linter">
+<meta property="og:description" content="Practical tutorials for understanding cloud bills and investigating cloud costs."><meta property="og:url" content="{BASE}/guides">
+<style>
+:root{{--bg:#0b0f19;--panel:#111827;--line:#263244;--ink:#f3f4f6;--muted:#aab4c3;--accent:#67e8f9}}
+*{{box-sizing:border-box}}body{{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}}
+header,footer{{border-color:var(--line);border-style:solid;padding:18px max(20px,calc((100% - 1000px)/2))}}
+header{{border-width:0 0 1px}}footer{{border-width:1px 0 0;color:#cbd5e1;font-size:14px}}
+nav{{display:flex;flex-wrap:wrap;gap:18px}}a{{color:var(--accent)}}nav a{{text-decoration:none}}
+main{{max-width:1000px;margin:42px auto;padding:0 22px 54px}}
+h1{{font-size:clamp(30px,5vw,42px);line-height:1.2;margin:0 0 12px}}
+.intro{{color:#d4dbe5;max-width:760px;margin:0 0 28px}}
+.guide-grid{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}}
+.guide-card{{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;display:flex;flex-direction:column;min-height:190px}}
+.guide-card h2{{font-size:20px;line-height:1.35;margin:0 0 10px}}.guide-card h2 a{{text-decoration:none}}
+.guide-card p{{color:#cbd5e1;margin:0 0 18px}}.read-link{{font-weight:650;text-decoration:underline;text-underline-offset:3px;margin-top:auto}}
+.back{{display:inline-block;margin-bottom:18px;text-decoration:none}}
+footer a{{color:#67e8f9;font-weight:600;text-decoration:underline;text-underline-offset:3px}}
+footer a:focus-visible,nav a:focus-visible,.guide-card a:focus-visible{{outline:2px solid #67e8f9;outline-offset:4px;border-radius:3px}}
+@media(max-width:640px){{main{{margin:26px auto;padding:0 16px 40px}}.guide-grid{{grid-template-columns:1fr}}.guide-card{{min-height:0;padding:20px}}}}
+</style></head><body>
+<header><nav aria-label="Main navigation"><a href="/">Tool</a><a href="/about">About</a><a href="/guides" aria-current="page">Guides</a><a href="/contact">Contact</a></nav></header>
+<main><a class="back" href="/">← Back to Cloud Cost Linter</a>
+<h1>Cloud FinOps Guides</h1>
+<p class="intro">Practical, independent guides to help you understand cloud billing data, investigate unusual costs, and make better-informed FinOps decisions. Each guide explains what to check, common pitfalls, and where Cloud Cost Linter can help.</p>
+<section class="guide-grid" aria-label="All cloud FinOps guides">{cards.join("")}</section>
+</main>
+<footer>Cloud Cost Linter · Open-source cloud billing analysis tool · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/contact">Contact</a></footer>
+</body></html>"""
