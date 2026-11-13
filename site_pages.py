@@ -521,7 +521,7 @@ footer a:focus-visible,nav a:focus-visible,.guide-card a:focus-visible{{outline:
 <main><a class="back" href="/">← Back to Cloud Cost Linter</a>
 <h1>Cloud FinOps Guides</h1>
 <p class="intro">Practical, independent guides to help you understand cloud billing data, investigate unusual costs, and make better-informed FinOps decisions. Each guide explains what to check, common pitfalls, and where Cloud Cost Linter can help.</p>
-<section class="guide-grid" aria-label="All cloud FinOps guides">{cards.join("")}</section>
+<section class="guide-grid" aria-label="All cloud FinOps guides">{''.join(cards)}</section>
 </main>
 <footer>Cloud Cost Linter · Open-source cloud billing analysis tool · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/contact">Contact</a></footer>
 </body></html>"""
