@@ -24,6 +24,19 @@ class RenderAppTests(unittest.TestCase):
         self.assertNotIn("Your files never leave your computer", page)
         self.assertNotIn("100% Local · Zero Telemetry", page)
 
+    def test_privacy_page_includes_future_advertising_disclosures(self):
+        response = self.client.get("/privacy")
+        self.assertEqual(response.status_code, 200)
+        page = response.get_data(as_text=True)
+        self.assertIn("Advertising is not currently enabled", page)
+        self.assertIn("prior visits to this website or other websites", page)
+        self.assertIn("Google Ads Settings", page)
+        self.assertIn("www.aboutads.info", page)
+        self.assertIn("Google-certified consent management platform (CMP)", page)
+        self.assertIn("IAB Europe Transparency and Consent Framework (TCF)", page)
+        self.assertIn("https://support.google.com/adsense/answer/13554116", page)
+        self.assertIn("This policy notice does not itself collect consent", page)
+
     def test_robots_txt_has_real_newlines_and_excludes_api(self):
         response = self.client.get("/robots.txt")
         self.assertEqual(response.status_code, 200)
