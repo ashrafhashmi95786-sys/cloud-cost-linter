@@ -531,7 +531,7 @@ INDEX_HTML = """<!DOCTYPE html>
   <main>
     <!-- Non-technical instructions by Marketer -->
     <div class="intro-card">
-      <h2 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.25rem;">Simple Cloud Billing Audit</h2>
+      <h1 style="font-size: clamp(1.6rem, 3vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem;">Free Cloud Billing CSV Analyzer</h1>
       <p style="font-size: 0.85rem; color: var(--text-muted);">
         Local mode processes CSV content on the machine running the server. Hosted mode transmits uploaded CSV content over HTTPS for in-memory analysis. The application does not intentionally write uploaded CSV contents to persistent storage. Hosting-provider infrastructure, temporary files, and logging policies may also affect data handling. Do not upload confidential or sensitive billing data to the hosted demo.
       </p>

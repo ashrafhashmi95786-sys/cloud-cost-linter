@@ -92,13 +92,19 @@ PAGES = {
 <p>Review the <a href="https://github.com/ashrafhashmi95786-sys/cloud-cost-linter">source repository</a> and submit a pull request with a clear description and relevant tests.</p>
 <h2>Protect your information</h2>
 <p>Never attach passwords, API keys, access tokens, customer details, or private billing exports to a public issue. Share only a small synthetic example that contains no confidential information.</p>
+<h2>What to include in a support request</h2>
+<p>To help us understand a problem, include the page or feature you were using, the steps that led to the issue, the result you expected, and the result you actually saw. If an error message appears, copy its text without including private data.</p>
+<h2>Response expectations</h2>
+<p>Cloud Cost Linter is maintained as an open-source project. Support is provided on a best-effort basis, so a response time is not guaranteed. For code defects or reproducible feature requests, the GitHub issue tracker is the preferred place to share details and follow progress.</p>
+<h2>Responsible disclosure</h2>
+<p>If you believe you have found a security vulnerability, please do not publish exploit details or sensitive information in a public issue. Contact the project by email with a concise description and safe reproduction steps so the concern can be reviewed responsibly.</p>
 """
     }
 }
 
 GUIDES = {
     "cloud-billing-csv-guide": {
-        "title": "How to Read a Cloud Billing CSV: A Practical Guide",
+        "title": "Read a Cloud Billing CSV: Practical Guide",
         "description": "A practical guide to cloud billing CSV columns, export checks, cost normalization, and safe analysis.",
         "heading": "How to Read a Cloud Billing CSV",
         "body": """
@@ -158,7 +164,7 @@ GUIDES = {
 """
     },
     "cloud-billing-anomaly-detection": {
-        "title": "Cloud Billing Anomaly Detection: Methods and Investigation",
+        "title": "Cloud Billing Anomaly Detection Methods",
         "description": "Understand cloud cost anomalies, statistical outliers, baselines, and a repeatable investigation workflow.",
         "heading": "Cloud Billing Anomaly Detection Explained",
         "body": """
@@ -204,7 +210,7 @@ GUIDES = {
 """
     },
     "duplicate-cloud-billing-charges": {
-        "title": "How to Investigate Possible Duplicate Cloud Billing Charges",
+        "title": "Investigate Duplicate Cloud Billing Charges",
         "description": "A practical checklist for validating repeated billing line items and distinguishing duplicates from legitimate charges.",
         "heading": "How to Investigate Possible Duplicate Cloud Charges",
         "body": """
@@ -249,7 +255,7 @@ GUIDES = {
 """
     },
     "cloud-rightsizing-basics": {
-        "title": "Cloud Rightsizing: Metrics, Risk, and a Safe Workflow",
+        "title": "Cloud Rightsizing: Metrics and Safe Steps",
         "description": "A practical guide to combining billing, utilization, reliability, and workload context before rightsizing cloud resources.",
         "heading": "Cloud Rightsizing: What Billing Data Can and Cannot Prove",
         "body": """
@@ -296,7 +302,7 @@ GUIDES = {
     }
     ,
     "cloud-cost-allocation-tagging": {
-        "title": "Cloud Cost Allocation and Tagging: Build a Reliable Ownership Model",
+        "title": "Cloud Cost Allocation and Tagging Guide",
         "description": "A practical framework for allocating cloud spend with account structure, tags, shared-cost rules, and coverage checks.",
         "heading": "Cloud Cost Allocation and Tagging",
         "body": """
@@ -348,7 +354,7 @@ GUIDES = {
 """
     },
     "cloud-budget-forecast-variance": {
-        "title": "Cloud Budgets and Forecast Variance: A Practical Guide",
+        "title": "Cloud Budgets and Forecast Variance Guide",
         "description": "Learn to set useful cloud budgets, interpret forecasts, investigate variance, and avoid alert fatigue.",
         "heading": "Cloud Budgets, Forecasts, and Variance",
         "body": """
@@ -398,7 +404,7 @@ GUIDES = {
 """
     },
     "cloud-data-transfer-costs": {
-        "title": "Cloud Data Transfer Costs: A Practical Guide",
+        "title": "Cloud Data Transfer Costs Guide",
         "description": "Understand common cloud data-transfer charges, trace network cost drivers, and evaluate optimizations without harming reliability.",
         "heading": "Cloud Data Transfer Costs",
         "body": """
@@ -451,7 +457,7 @@ GUIDES = {
 """
     },
     "cloud-commitment-discounts": {
-        "title": "Cloud Commitment Discounts: A Practical Guide",
+        "title": "Cloud Commitment Discounts Guide",
         "description": "Compare cloud commitment discounts with on-demand usage, evaluate utilization risk, and build a careful purchase decision.",
         "heading": "Cloud Commitment Discounts and Break-Even Analysis",
         "body": """
