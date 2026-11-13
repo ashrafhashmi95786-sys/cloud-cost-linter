@@ -458,7 +458,8 @@ def _layout(title, description, heading, body, path, updated=None):
 :root{{--bg:#0b0f19;--panel:#111827;--line:#263244;--ink:#f3f4f6;--muted:#aab4c3;--accent:#67e8f9}}
 *{{box-sizing:border-box}}body{{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}}
 header,footer{{border-color:var(--line);border-style:solid;padding:18px max(20px,calc((100% - 900px)/2));}}
-header{{border-width:0 0 1px}}footer{{border-width:1px 0 0;color:var(--muted);font-size:14px}}
+header{{border-width:0 0 1px}}footer{{border-width:1px 0 0;color:#cbd5e1;font-size:14px}}
+footer a{{color:#67e8f9;font-weight:600;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}}footer a:hover,footer a:focus-visible{{color:#a5f3fc}}footer a:focus-visible{{outline:2px solid #67e8f9;outline-offset:3px;border-radius:2px}}
 nav{{display:flex;flex-wrap:wrap;gap:18px}}a{{color:var(--accent)}}nav a{{text-decoration:none}}main{{max-width:900px;margin:42px auto;padding:0 22px 50px}}
 article{{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:clamp(22px,5vw,48px)}}
 h1{{font-size:clamp(30px,5vw,42px);line-height:1.2;margin:0 0 12px}}h2{{font-size:22px;margin-top:30px;line-height:1.35}}
