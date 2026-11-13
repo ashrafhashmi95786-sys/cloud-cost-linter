@@ -708,7 +708,7 @@ INDEX_HTML = """<!DOCTYPE html>
   </main>
 
   <footer>
-    Cloud Cost Linter · Open-source cloud billing analysis · <a href="/about">About</a> · <a href="/guides/cloud-billing-csv-guide">Guides</a> · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/contact">Contact</a>
+    Cloud Cost Linter · Open-source cloud billing analysis · <a href="/about">About</a> · <a href="/guides">Guides</a> · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/contact">Contact</a>
   </footer>
 
   <script>
