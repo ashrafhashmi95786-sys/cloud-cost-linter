@@ -161,7 +161,8 @@ class RenderAppTests(unittest.TestCase):
         ]
         self.assertEqual(len(urls), 14)
         self.assertEqual(len(set(urls)), 14)
-        self.assertIn("https://cloud-cost-linter.onrender.com/", urls)\n        self.assertIn("https://cloud-cost-linter.onrender.com/guides", urls)
+        self.assertIn("https://cloud-cost-linter.onrender.com/", urls)
+        self.assertIn("https://cloud-cost-linter.onrender.com/guides", urls)
 
     def test_sample_endpoint(self):
         response = self.client.get("/api/sample")
