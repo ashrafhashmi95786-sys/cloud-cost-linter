@@ -37,6 +37,13 @@ class RenderAppTests(unittest.TestCase):
         self.assertIn("https://support.google.com/adsense/answer/13554116", page)
         self.assertIn("This policy notice does not itself collect consent", page)
 
+    def test_privacy_page_contact_uses_email_not_public_issue_tracker(self):
+        response = self.client.get("/privacy")
+        self.assertEqual(response.status_code, 200)
+        page = response.get_data(as_text=True)
+        self.assertIn('mailto:ashwebtools95@gmail.com', page)
+        self.assertNotIn('github.com/ashrafhashmi95786-sys/cloud-cost-linter/issues', page)
+
     def test_robots_txt_has_real_newlines_and_excludes_api(self):
         response = self.client.get("/robots.txt")
         self.assertEqual(response.status_code, 200)
