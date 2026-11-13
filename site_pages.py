@@ -52,7 +52,7 @@ PAGES = {
 <h2>No warranty</h2>
 <p>To the extent permitted by applicable law, the tool is provided without warranties of accuracy, fitness for a particular purpose, or uninterrupted availability. You must independently verify any decision based on its output.</p>
 <h2>Contact</h2>
-<p>For questions about these terms, use the <a href="https://github.com/ashrafhashmi95786-sys/cloud-cost-linter/issues">GitHub issue tracker</a>. Do not include secrets or private billing records.</p>
+<p>For questions about these terms, email <a href="mailto:ashwebtools95@gmail.com">ashwebtools95@gmail.com</a>. Do not include passwords, API keys, access tokens, customer details, or confidential billing exports.</p>
 """
     },
     "about": {
