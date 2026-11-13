@@ -41,6 +41,15 @@ class RenderAppTests(unittest.TestCase):
         self.assertIn("Do not upload confidential", page)
         self.assertNotIn("\\n    <!-- Upload Zone -->", page)
 
+    def test_google_search_console_verification_file(self):
+        response = self.client.get("/google2e731cb1546f4a5a.html")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.mimetype, "text/html")
+        self.assertEqual(
+            response.get_data(as_text=True),
+            "google-site-verification: google2e731cb1546f4a5a.html",
+        )
+
     def test_sample_endpoint(self):
         response = self.client.get("/api/sample")
         self.assertEqual(response.status_code, 200)
