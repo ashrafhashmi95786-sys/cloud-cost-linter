@@ -75,7 +75,9 @@ def robots_txt():
 
 @app.get("/sitemap.xml")
 def sitemap():
-    paths = ["/"] + ["/" + slug for slug in SITE_PAGE_SLUGS] + ["/guides"] + ["/guides/" + slug for slug in GUIDE_SLUGS]
+    legacy_guide_paths = [path for path in LEGACY_SITE_PAGES if path.startswith("/guides/")]
+    paths = ["/"] + ["/" + slug for slug in SITE_PAGE_SLUGS] + ["/guides"] + ["/guides/" + slug for slug in GUIDE_SLUGS] + legacy_guide_paths
+    paths = list(dict.fromkeys(paths))
     urls = "".join("<url><loc>https://cloud-cost-linter.onrender.com" + path + "</loc></url>" for path in paths)
     xml = '<?xml version="1.0" encoding="UTF-8"?>' + '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + urls + "</urlset>"
     return Response(xml, mimetype="application/xml")
