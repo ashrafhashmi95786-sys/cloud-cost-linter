@@ -148,7 +148,7 @@ class RenderAppTests(unittest.TestCase):
         ]:
             self.assertIn(f'href="/guides/{slug}"', page)
 
-    def test_sitemap_contains_all_14_unique_public_urls(self):
+    def test_sitemap_contains_all_17_unique_public_urls(self):
         import xml.etree.ElementTree as ET
 
         response = self.client.get("/sitemap.xml")
@@ -159,8 +159,14 @@ class RenderAppTests(unittest.TestCase):
             node.text
             for node in root.findall("sm:url/sm:loc", namespace)
         ]
-        self.assertEqual(len(urls), 14)
-        self.assertEqual(len(set(urls)), 14)
+        self.assertEqual(len(urls), 17)
+        self.assertEqual(len(set(urls)), 17)
+        for slug in [
+            "aws-billing-csv-analysis",
+            "duplicate-cloud-charges",
+            "cloud-cost-anomalies",
+        ]:
+            self.assertIn(f"https://cloud-cost-linter.onrender.com/guides/{slug}", urls)
         self.assertIn("https://cloud-cost-linter.onrender.com/", urls)
         self.assertIn("https://cloud-cost-linter.onrender.com/guides", urls)
 
