@@ -10,7 +10,7 @@ from flask import Flask, Response, jsonify, request
 from werkzeug.exceptions import RequestEntityTooLarge
 
 from cloud_cost_linter import CloudCostLinter, CloudCostLinterError
-from cloud_cost_linter_web import INDEX_HTML, MAX_UPLOAD_SIZE, _safe_download_stem
+from cloud_cost_linter_web import INDEX_HTML, MAX_UPLOAD_SIZE, SITE_PAGES as LEGACY_SITE_PAGES, _safe_download_stem
 from site_pages import GUIDE_SLUGS, SITE_PAGE_SLUGS, render_guides_index, render_site_page
 
 app = Flask(__name__)
@@ -96,13 +96,30 @@ def public_page(slug):
 
 @app.get("/guides")
 def guides_index():
-    return Response(render_guides_index(), mimetype="text/html")
+    page = render_guides_index()
+    new_guides = """
+<section class="new-guides" aria-labelledby="new-guides-heading">
+<h2 id="new-guides-heading">More Cloud Billing Guides</h2>
+<ul>
+<li><a href="/guides/aws-billing-csv-analysis">How to Analyze AWS Billing CSV Exports</a></li>
+<li><a href="/guides/duplicate-cloud-charges">How to Investigate Duplicate Cloud Charges</a></li>
+<li><a href="/guides/cloud-cost-anomalies">How to Verify Cloud Cost Anomalies</a></li>
+</ul>
+</section>
+"""
+    page = page.replace("</main>", new_guides + "</main>")
+    return Response(page, mimetype="text/html")
 
 @app.get("/guides/<slug>")
 def guide_page(slug):
-    if slug not in GUIDE_SLUGS:
-        return Response("Page not found.", status=404, mimetype="text/plain")
-    return Response(render_site_page(slug), mimetype="text/html")
+    if slug in GUIDE_SLUGS:
+        return Response(render_site_page(slug), mimetype="text/html")
+    # PR #40 authored these full HTML pages in cloud_cost_linter_web.py.
+    # Render's WSGI entrypoint is app.py, so serve those pages from this route too.
+    legacy_page = LEGACY_SITE_PAGES.get(f"/guides/{slug}")
+    if legacy_page:
+        return Response(legacy_page, mimetype="text/html")
+    return Response("Page not found.", status=404, mimetype="text/plain")
 
 @app.get("/social-preview.svg")
 def social_preview():
