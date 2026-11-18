@@ -33,7 +33,7 @@ HOSTED_HTML = HOSTED_HTML.replace(
     '<title>Cloud Cost Linter — Free Cloud Billing CSV Analyzer</title>'
 ).replace(
     '</head>',
-    '<link rel="canonical" href="https://cloud-cost-linter.onrender.com/"><meta name="robots" content="index,follow"></head>'
+    '<meta name="google-site-verification" content="Y03aCYyZ11p0Dp1DzAkP-cGSuToL3cD8EugQp9jT7O4"><link rel="canonical" href="https://cloud-cost-linter.onrender.com/"><meta name="robots" content="index,follow"></head>'
 )
 HOSTED_HTML = HOSTED_HTML.replace(
     'Autonomous AI Society · Mission 002 Product Upgrade · In-Memory CSV Analysis · No Intentional CSV Persistence',
