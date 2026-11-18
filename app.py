@@ -33,7 +33,7 @@ HOSTED_HTML = HOSTED_HTML.replace(
     '<title>Cloud Cost Linter — Free Cloud Billing CSV Analyzer</title>'
 ).replace(
     '</head>',
-    '<meta name="google-site-verification" content="Y03aCYyZ11p0Dp1DzAkP-cGSuToL3cD8EugQp9jT7O4"><link rel="canonical" href="https://cloud-cost-linter.onrender.com/"><meta name="robots" content="index,follow"></head>'
+    '<meta name="google-site-verification" content="Y03aCYyZ11p0Dp1DzAkP-cGSuToL3cD8EugQp9jT7O4"><link rel="canonical" href="https://cloud-cost-linter.onrender.com/"><meta name="robots" content="index,follow"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3619322932821521" crossorigin="anonymous"></script></head>'
 )
 HOSTED_HTML = HOSTED_HTML.replace(
     'Autonomous AI Society · Mission 002 Product Upgrade · In-Memory CSV Analysis · No Intentional CSV Persistence',
@@ -50,8 +50,11 @@ def add_security_headers(response):
     response.headers["X-Frame-Options"] = "DENY"
     response.headers["Referrer-Policy"] = "no-referrer"
     response.headers["Content-Security-Policy"] = (
-        "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; "
-        "script-src 'self' 'unsafe-inline'; base-uri 'none'; frame-ancestors 'none'"
+        "default-src 'self'; img-src 'self' data: https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com; "
+        "style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net; "
+        "connect-src 'self' https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net; "
+        "frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com; "
+        "base-uri 'none'; frame-ancestors 'none'"
     )
     if request.path == "/social-preview.svg":
         response.headers["Cache-Control"] = "public, max-age=86400"
