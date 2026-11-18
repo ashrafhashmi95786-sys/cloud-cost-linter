@@ -76,6 +76,11 @@ def robots_txt():
     body = "User-agent: *\nAllow: /\nDisallow: /api/\nSitemap: https://cloud-cost-linter.onrender.com/sitemap.xml\n"
     return Response(body, mimetype="text/plain")
 
+@app.get("/ads.txt")
+def ads_txt():
+    body = "google.com, pub-3619322932821521, DIRECT, f08c47fec0942fa0\\n"
+    return Response(body, mimetype="text/plain")
+
 @app.get("/sitemap.xml")
 def sitemap():
     legacy_guide_paths = [path for path in LEGACY_SITE_PAGES if path.startswith("/guides/")]
